@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sheet Viewer</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f0e8;
+      --ink: #1a1410;
+      --accent: #c84b2f;
+      --muted: #8a7f72;
+      --card: #fffdf8;
+      --border: #d6cfc3;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 420px;
+      padding-top: 2rem;
+    }
+
+    .label {
+      font-family: 'Fraunces', serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    h1 {
+      font-family: 'Fraunces', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .subtitle {
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem;
+      box-shadow: 4px 4px 0px var(--border);
+    }
+
+    .search-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .search-input {
+      flex: 1;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      padding: 0.55rem 0.8rem;
+      border: 1.5px solid var(--border);
+      border-radius: 3px;
+      background: var(--bg);
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--muted); }
+
+    .refresh-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.55rem 1rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .refresh-btn:hover { opacity: 0.88; }
+    .refresh-btn:active { transform: scale(0.97); }
+    .refresh-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    .row-count {
+      font-size: 0.62rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      min-height: 1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    thead tr { border-bottom: 2px solid var(--ink); }
+    thead th {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      padding: 0 0 0.6rem;
+    }
+    thead th.right { text-align: right; }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+
+    td { padding: 0.65rem 0; }
+    td.num {
+      font-size: 0.75rem;
+      color: var(--muted);
+      width: 3.5rem;
+    }
+    td.word {
+      font-family: 'Fraunces', serif;
+      font-size: 1.15rem;
+      font-weight: 300;
+      font-style: italic;
+      text-align: right;
+      color: var(--ink);
+    }
+
+    .empty-state, .loading-state, .error-state {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 2rem 0;
+    }
+    .error-state { color: var(--accent); }
+
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1.5rem;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      background: #4caf72;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    mark {
+      background: #ffe58a;
+      border-radius: 2px;
+      padding: 0 1px;
+      font-style: normal;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="label">Live Sheet</div>
+  <h1>All <em>Results</em></h1>
+  <p class="subtitle">Auto-loads from Google Sheets — filter or refresh anytime</p>
+
+  <div class="card">
+    <div class="search-row">
+      <input class="search-input" id="searchInput" type="text" placeholder="Filter by number or word…" oninput="filterTable()" />
+      <button class="refresh-btn" id="refreshBtn" onclick="loadSheet()">↻ Refresh</button>
+    </div>
+
+    <div class="row-count" id="rowCount"></div>
+    <div id="tableWrap"><div class="loading-state"><span class="spinner"></span>Loading…</div></div>
+  </div>
+
+  <div class="live-badge"><span class="live-dot"></span>Live from Google Sheets</div>
+</div>
+
+<script>
+  const API_URL = 'https://script.google.com/macros/s/AKfycbx32ngD7AAJH_3-9I9ytwnnBSfnRXhmm9PoGyOutWWL2R94qMEXgZ_nkH_-PW6VPMOGRQ/exec';
+  let allRows = [];
+
+  async function loadSheet() {
+    const btn = document.getElementById('refreshBtn');
+    const wrap = document.getElementById('tableWrap');
+    btn.disabled = true;
+    wrap.innerHTML = '<div class="loading-state"><span class="spinner"></span>Loading…</div>';
+    document.getElementById('rowCount').textContent = '';
+
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error('Fetch failed');
+      allRows = await res.json();
+      document.getElementById('searchInput').value = '';
+      renderTable(allRows, '');
+    } catch (err) {
+      wrap.innerHTML = '<div class="error-state">Could not reach sheet — check Apps Script deployment</div>';
+      console.error(err);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function filterTable() {
+    const q = document.getElementById('searchInput').value.trim().toLowerCase();
+    const filtered = allRows.filter(r =>
+      r.num.toLowerCase().includes(q) || r.word.toLowerCase().includes(q)
+    );
+    renderTable(filtered, q);
+  }
+
+  function hl(text, q) {
+    if (!q) return text;
+    const i = text.toLowerCase().indexOf(q);
+    if (i === -1) return text;
+    return text.slice(0, i) + '<mark>' + text.slice(i, i + q.length) + '</mark>' + text.slice(i + q.length);
+  }
+
+  function renderTable(rows, q) {
+    const wrap = document.getElementById('tableWrap');
+    const count = document.getElementById('rowCount');
+
+    count.textContent = rows.length === 0 ? '' :
+      rows.length === allRows.length
+        ? `${rows.length} row${rows.length !== 1 ? 's' : ''}`
+        : `${rows.length} of ${allRows.length} rows`;
+
+    if (rows.length === 0) {
+      wrap.innerHTML = '<div class="empty-state">No matching rows</div>';
+      return;
+    }
+
+    let html = `<table><thead><tr><th>Input</th><th class="right">Output</th></tr></thead><tbody>`;
+    for (const row of rows) {
+      html += `<tr><td class="num">${hl(row.num, q)}</td><td class="word">${hl(row.word, q)}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  }
+
+  loadSheet();
+</script>
+</body>
+</html>
