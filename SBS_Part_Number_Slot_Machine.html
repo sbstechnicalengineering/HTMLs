@@ -23,22 +23,30 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .wrap{max-width:720px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
 
 .hdr{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:0.65rem 1.25rem;background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:50;box-shadow:var(--shadow);margin-left:-1.25rem;margin-right:-1.25rem;width:calc(100% + 2.5rem)}
-.hdr-icon{width:40px;height:40px;background:var(--navy);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.hdr-icon{width:60px;height:60px;background:var(--navy);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:30px}
 .hdr-title{font-size:20px;font-weight:800;letter-spacing:-.01em;font-family:"Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
 .hdr-sub{font-size:11px;color:var(--gray-500);margin-top:1px}
 
 .scorebar{display:flex;gap:8px;margin-bottom:1rem}
 .score-tile{flex:1;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:8px 6px;text-align:center}
-.score-n{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:800;color:var(--navy)}
+.score-n{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:800;color:var(--navy);display:flex;align-items:center;justify-content:center;gap:3px}
 .score-l{font-size:8.5px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.score-tile--gold{background:linear-gradient(180deg,#FFF6DE,#FBE7A8);border-color:#E3BE5C}
+.score-tile--gold .score-n{color:#8A6418}
+.score-tile--gold .score-l{color:#9C7A22}
+.coin-ico{font-size:16px;line-height:1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
 
 .machine-row{display:flex;align-items:stretch;gap:0;margin-bottom:1rem}
 .cabinet{flex:1;min-width:0;background:var(--navy);border-radius:14px 0 0 14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow)}
-.lever-housing{width:48px;background:var(--navy-darker);border-radius:0 14px 14px 0;box-shadow:var(--shadow);display:flex;justify-content:center;padding-top:14px;position:relative;overflow:visible;flex-shrink:0}
+.lever-housing{width:84px;background:var(--navy-darker);border-radius:0 14px 14px 0;box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 8px 16px;gap:16px;position:relative;overflow:visible;flex-shrink:0}
+.lever-trigger{cursor:pointer;padding:4px 16px;display:flex;justify-content:center}
+.lever-trigger:active .lever-knob{transform:translateX(-50%) translateY(2px)}
 .lever-rod{width:7px;height:84px;background:linear-gradient(180deg,#C9CDD2,#7A8088);border-radius:4px;transform-origin:top center;position:relative}
 .lever-knob{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--orange);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 -2px 3px rgba(0,0,0,.25)}
 .lever-rod.pulled{animation:leverPull .55s cubic-bezier(.3,0,.5,1)}
 @keyframes leverPull{0%{transform:rotate(0deg)}45%{transform:rotate(32deg)}100%{transform:rotate(0deg)}}
+.btn-spin{padding:8px 4px;font-size:12px;width:100%;justify-content:center;gap:4px}
+.btn-spin:disabled{opacity:.45;cursor:default}
 
 .reels-scroll{overflow-x:auto;padding-bottom:2px}
 .reels{display:flex;gap:6px;min-width:min-content}
@@ -109,7 +117,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
   <div class="modal">
     <div class="modal-hdr">Part Number Slot Machine</div>
     <div class="modal-body">
-      <p>Spin the reels, decode a real SBS part number, and see how well you know our nomenclature. You start with 5 credits &mdash; a correct answer pays out 2 more. Enter your email to start.</p>
+      <p>Spin the reels, decode a real SBS part number, and see how well you know our nomenclature. You start with 5 credits &mdash; every spin costs 1, and a correct answer pays out 2. Enter your email to start.</p>
       <input type="email" id="emailInput" placeholder="you@company.com" autocomplete="email">
       <div class="err" id="emailErr">Enter a valid email to continue.</div>
     </div>
@@ -129,7 +137,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
   </div>
 
   <div class="scorebar">
-    <div class="score-tile"><div class="score-n" id="creditsVal">5</div><div class="score-l">Credits</div></div>
+    <div class="score-tile score-tile--gold"><div class="score-n"><span class="coin-ico">🪙</span><span id="creditsVal">5</span></div><div class="score-l">Credits</div></div>
     <div class="score-tile"><div class="score-n" id="streakVal">0</div><div class="score-l">Streak</div></div>
     <div class="score-tile"><div class="score-n" id="spinsVal">0</div><div class="score-l">Spins</div></div>
     <div class="score-tile"><div class="score-n" id="bestVal">0</div><div class="score-l">High score</div></div>
@@ -141,12 +149,14 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
         <div class="reels" id="reelsWrap"></div>
       </div>
       <div class="spin-row">
-        <button class="btn btn-primary" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
         <button class="btn btn-cashout" id="cashoutBtn" onclick="cashOut()" disabled>Cash Out</button>
       </div>
     </div>
     <div class="lever-housing">
-      <div class="lever-rod" id="leverRod"><div class="lever-knob"></div></div>
+      <div class="lever-trigger" id="leverTrigger" onclick="leverClick()">
+        <div class="lever-rod" id="leverRod"><div class="lever-knob"></div></div>
+      </div>
+      <button class="btn btn-primary btn-spin" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
     </div>
   </div>
 
@@ -154,7 +164,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
     <div class="qcard"><div class="idle-msg" id="idleMsg">Loading real SBS part numbers&hellip;</div></div>
   </div>
 
-  <div class="foot-note">Nudge &#8635; swaps in another real part that changes just that reel where one exists. Full Spin rerolls everything. Cash Out unlocks after 3 spins.</div>
+  <div class="foot-note">Pull the lever or hit Spin &mdash; each spin costs 1 coin, so skipping a question still costs you. Nudge &#8635; swaps in another real part that changes just that reel; Code/Material nudges cost a coin too, the rest are free. Cash Out unlocks after 3 spins, or anytime you run out of coins.</div>
 </div>
 
 <script>
@@ -279,8 +289,8 @@ async function loadData(){
   });
 
   $('idleMsg').textContent = 'Hit Spin to decode a real SBS part number.';
-  $('spinBtn').disabled = false;
   randomReels();
+  setControlsEnabled(true);
 }
 
 function startGame(){
@@ -348,7 +358,6 @@ function renderAllStatic(r){
     $('main'+i).textContent = compact[i].text;
     $('above'+i).textContent = neighborFor(kind, r) || '···';
     $('below'+i).textContent = neighborFor(kind, r) || '···';
-    $('nudgeBtn'+i).disabled = state.cashedOut;
   }
 }
 
@@ -392,10 +401,16 @@ function pullLever(){
   rod.classList.add('pulled');
 }
 
+function leverClick(){
+  if ($('spinBtn').disabled) return;
+  spin();
+}
+
 function spin(){
-  if (!state.email || state.cashedOut) return;
+  if (!state.email || state.cashedOut || state.credits < 1) return;
   pullLever();
   setControlsEnabled(false);
+  state.credits -= 1; $('creditsVal').textContent = state.credits;
   state.spins++; $('spinsVal').textContent = state.spins;
   updateCashoutAvailability();
   const next = pick(REALPARTS);
@@ -420,6 +435,8 @@ function nudge(i){
   const compact = state.current.compact;
   if (i >= compact.length) return;
   const kind = compact[i].kind;
+  const quizzes = (kind === 'code' || kind === 'material');
+  if (quizzes && state.credits < 1) return;
   const cur = state.current;
   const group = CODE_GROUPS[cur.Code] || [];
 
@@ -438,8 +455,10 @@ function nudge(i){
     next = options.length ? pick(options) : pick(REALPARTS);
   }
 
-  const quizzes = (kind === 'code' || kind === 'material');
-  if (quizzes){ state.spins++; $('spinsVal').textContent = state.spins; updateCashoutAvailability(); }
+  if (quizzes){
+    state.credits -= 1; $('creditsVal').textContent = state.credits;
+    state.spins++; $('spinsVal').textContent = state.spins; updateCashoutAvailability();
+  }
 
   // Instantly resync every other reel to the new part, then animate just this one.
   state.current = next;
@@ -451,16 +470,19 @@ function nudge(i){
 }
 
 function setControlsEnabled(on){
-  $('spinBtn').disabled = !on || state.cashedOut;
+  const canAfford = state.credits >= 1;
+  $('spinBtn').disabled = !on || state.cashedOut || !canAfford;
   const compact = state.current ? state.current.compact : [];
   for (let i = 0; i < WHEEL_COUNT; i++){
-    $('nudgeBtn'+i).disabled = !on || state.cashedOut || i >= compact.length;
+    if (i >= compact.length){ $('nudgeBtn'+i).disabled = true; continue; }
+    const costs = (compact[i].kind === 'code' || compact[i].kind === 'material');
+    $('nudgeBtn'+i).disabled = !on || state.cashedOut || (costs && !canAfford);
   }
   updateCashoutAvailability();
 }
 
 function updateCashoutAvailability(){
-  $('cashoutBtn').disabled = state.cashedOut || state.spins < 3;
+  $('cashoutBtn').disabled = state.cashedOut || (state.spins < 3 && state.credits >= 1);
 }
 
 // ───────────────────────── QUESTION ─────────────────────────
@@ -520,7 +542,7 @@ function answer(i){
   $('streakVal').textContent = state.streak;
 
   $('explainArea').innerHTML = `
-    <div class="explain">${correct ? '✅ Correct! +2 credits. ' : '❌ Not quite, no credits this round. '}<strong>${state.q.correctMeaning}</strong></div>
+    <div class="explain">${correct ? '✅ Correct! +2 credits. ' : "❌ Not quite — that coin's gone. "}<strong>${state.q.correctMeaning}</strong></div>
     <div class="next-row"><button class="btn btn-outline" onclick="spin()">Spin again &rarr;</button></div>`;
 
   submitResult(correct, false);
@@ -535,7 +557,7 @@ function cashOut(){
   $('cashoutBtn').disabled = true;
   $('questionArea').innerHTML = `
     <div class="cashout-banner">
-      <div class="big">${state.credits} credits</div>
+      <div class="big">🪙 ${state.credits} credits</div>
       <p>Cashed out after ${state.spins} spins. Refresh the page to play again.</p>
     </div>`;
   submitResult(null, true);
