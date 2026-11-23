@@ -9,7 +9,7 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#1D3557;--navy-dark:#12243a;
+  --navy:#1D3557;--navy-dark:#12243a;--navy-darker:#0b1626;
   --orange:#E87722;--orange-light:#F0913A;--orange-pale:#FDF0E5;
   --white:#ffffff;
   --gray-50:#F8F9FA;--gray-100:#F0F2F5;--gray-200:#E2E6EA;
@@ -28,13 +28,20 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .hdr-sub{font-size:11px;color:var(--gray-500);margin-top:1px}
 
 .scorebar{display:flex;gap:8px;margin-bottom:1rem}
-.score-tile{flex:1;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:8px 10px;text-align:center}
-.score-n{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:800;color:var(--navy)}
-.score-l{font-size:9px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.score-tile{flex:1;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:8px 6px;text-align:center}
+.score-n{font-family:"Barlow Condensed",sans-serif;font-size:21px;font-weight:800;color:var(--navy)}
+.score-l{font-size:8.5px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 
-.cabinet{background:var(--navy);border-radius:14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
+.machine-row{display:flex;align-items:stretch;gap:0;margin-bottom:1rem}
+.cabinet{flex:1;background:var(--navy);border-radius:14px 0 0 14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow)}
+.lever-housing{width:48px;background:var(--navy-darker);border-radius:0 14px 14px 0;box-shadow:var(--shadow);display:flex;justify-content:center;padding-top:14px;position:relative;overflow:visible}
+.lever-rod{width:7px;height:84px;background:linear-gradient(180deg,#C9CDD2,#7A8088);border-radius:4px;transform-origin:top center;position:relative}
+.lever-knob{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--orange);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 -2px 3px rgba(0,0,0,.25)}
+.lever-rod.pulled{animation:leverPull .55s cubic-bezier(.3,0,.5,1)}
+@keyframes leverPull{0%{transform:rotate(0deg)}45%{transform:rotate(32deg)}100%{transform:rotate(0deg)}}
+
 .pn-readout{background:var(--navy-dark);border-radius:8px;padding:10px 14px;margin-bottom:1rem;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px}
-.pn-seg{font-family:var(--mono);font-size:19px;font-weight:600;color:#fff;padding:2px 6px;border-radius:4px}
+.pn-seg{font-family:var(--mono);font-size:18px;font-weight:600;color:#fff;padding:2px 6px;border-radius:4px}
 .pn-seg.size{background:#5C5A54}
 .pn-seg.code{background:var(--orange)}
 .pn-seg.material{background:#2A7A3C}
@@ -42,20 +49,25 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .reels{display:flex;gap:10px}
 .reel-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
 .reel-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.reel-window{width:100%;background:#fff;border-radius:8px;padding:14px 6px;text-align:center;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--navy);min-height:28px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
-.reel-window.spinning{color:var(--gray-400)}
-.nudge-row{display:flex;gap:4px}
-.nudge-btn{width:32px;height:28px;border:none;border-radius:6px;background:rgba(255,255,255,.14);color:#fff;font-size:13px;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center}
-.nudge-btn:hover{background:rgba(255,255,255,.26)}
+.reel-window{width:100%;background:#fff;border-radius:8px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
+.reel-row{height:26px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--gray-400);background:var(--gray-100);letter-spacing:.02em;overflow:hidden;white-space:nowrap;padding:0 2px}
+.reel-row.payline{height:32px;font-size:15px;font-weight:700;color:var(--navy);background:var(--orange-pale);border-top:2px solid var(--orange);border-bottom:2px solid var(--orange)}
+.nudge-btn{display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;padding:5px 2px;border:none;border-radius:6px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;transition:background .12s}
+.nudge-btn:hover:not(:disabled){background:rgba(255,255,255,.26)}
 .nudge-btn:disabled{opacity:.3;cursor:default}
+.nudge-ico{font-size:13px;line-height:1}
+.nudge-txt{font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-family:"Barlow",sans-serif}
 
-.spin-row{margin-top:1.1rem;text-align:center}
-.btn{padding:11px 28px;border:none;border-radius:var(--r);font-family:"Barlow",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em}
+.spin-row{margin-top:1.1rem;text-align:center;display:flex;gap:8px;justify-content:center}
+.btn{padding:11px 22px;border:none;border-radius:var(--r);font-family:"Barlow",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em}
 .btn-primary{background:var(--orange);color:#fff;box-shadow:0 2px 8px rgba(232,119,34,.4)}
 .btn-primary:hover:not(:disabled){background:var(--orange-light);transform:translateY(-1px)}
 .btn-primary:disabled{opacity:.45;cursor:default;transform:none}
 .btn-outline{background:transparent;border:1px solid var(--gray-300);color:var(--gray-600)}
-.btn-outline:hover{border-color:var(--navy);color:var(--navy)}
+.btn-outline:hover:not(:disabled){border-color:var(--navy);color:var(--navy)}
+.btn-cashout{background:var(--green);color:#fff}
+.btn-cashout:hover:not(:disabled){background:#145e2d}
+.btn-cashout:disabled{opacity:.35;cursor:default}
 
 .qcard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:1.1rem 1.2rem;box-shadow:var(--shadow)}
 .q-hint{font-size:10px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:6px}
@@ -68,6 +80,10 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .choice:disabled{cursor:default}
 .explain{margin-top:12px;padding:10px 12px;border-radius:var(--r);font-size:12.5px;background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-700)}
 .next-row{margin-top:12px;text-align:right}
+
+.cashout-banner{background:var(--green-bg);border:1px solid var(--green-border);border-radius:var(--r);padding:1.1rem 1.2rem;text-align:center}
+.cashout-banner .big{font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:800;color:var(--green)}
+.cashout-banner p{font-size:13px;color:var(--gray-700);margin-top:4px}
 
 .idle-msg{text-align:center;color:var(--gray-500);font-size:13px;padding:1.5rem 0}
 
@@ -85,8 +101,8 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 
 @media(max-width:480px){
   .wrap{padding:1rem 1rem 2.5rem}
-  .pn-seg{font-size:15px}
-  .reel-window{font-size:16px}
+  .pn-seg{font-size:14px}
+  .reel-row.payline{font-size:13px}
 }
 </style>
 </head>
@@ -96,7 +112,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
   <div class="modal">
     <div class="modal-hdr">Part Number Slot Machine</div>
     <div class="modal-body">
-      <p>Spin the reels, decode the part number, and see how well you know SBS nomenclature. Enter your email to start &mdash; your score gets saved as you play.</p>
+      <p>Spin the reels, decode a real SBS part number, and see how well you know our nomenclature. You start with 5 credits &mdash; a correct answer pays out 2 more. Enter your email to start.</p>
       <input type="email" id="emailInput" placeholder="you@company.com" autocomplete="email">
       <div class="err" id="emailErr">Enter a valid email to continue.</div>
     </div>
@@ -111,94 +127,102 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
     <div class="hdr-icon">🎰</div>
     <div>
       <div class="hdr-title">Part Number Slot Machine</div>
-      <div class="hdr-sub">Decode SBS part numbers &mdash; spin, nudge, learn</div>
+      <div class="hdr-sub">Decode real SBS part numbers &mdash; spin, nudge, learn</div>
     </div>
   </div>
 
   <div class="scorebar">
-    <div class="score-tile"><div class="score-n" id="scoreVal">0</div><div class="score-l">Score</div></div>
+    <div class="score-tile"><div class="score-n" id="creditsVal">5</div><div class="score-l">Credits</div></div>
     <div class="score-tile"><div class="score-n" id="streakVal">0</div><div class="score-l">Streak</div></div>
     <div class="score-tile"><div class="score-n" id="spinsVal">0</div><div class="score-l">Spins</div></div>
-    <div class="score-tile"><div class="score-n" id="bestVal">0</div><div class="score-l">Best</div></div>
+    <div class="score-tile"><div class="score-n" id="bestVal">0</div><div class="score-l">High score</div></div>
   </div>
 
-  <div class="cabinet">
-    <div class="pn-readout" id="pnReadout">
-      <span class="pn-seg size" id="segSize">&hellip;</span>
-      <span class="pn-seg code" id="segCode">&hellip;</span>
-      <span class="pn-seg material" id="segMaterial">&hellip;</span>
+  <div class="machine-row">
+    <div class="cabinet">
+      <div class="pn-readout" id="pnReadout">
+        <span class="pn-seg size" id="segSize">&hellip;</span>
+        <span class="pn-seg code" id="segCode">&hellip;</span>
+        <span class="pn-seg material" id="segMaterial">&hellip;</span>
+      </div>
+      <div class="reels">
+        <div class="reel-col">
+          <div class="reel-lbl">Size</div>
+          <div class="reel-window">
+            <div class="reel-row" id="sizeAbove">&middot;&middot;&middot;</div>
+            <div class="reel-row payline" id="sizeMain">&hellip;</div>
+            <div class="reel-row" id="sizeBelow">&middot;&middot;&middot;</div>
+          </div>
+          <button class="nudge-btn" id="nudgeSizeBtn" onclick="nudge('size')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
+        </div>
+        <div class="reel-col">
+          <div class="reel-lbl">Code</div>
+          <div class="reel-window">
+            <div class="reel-row" id="codeAbove">&middot;&middot;&middot;</div>
+            <div class="reel-row payline" id="codeMain">&hellip;</div>
+            <div class="reel-row" id="codeBelow">&middot;&middot;&middot;</div>
+          </div>
+          <button class="nudge-btn" id="nudgeCodeBtn" onclick="nudge('code')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
+        </div>
+        <div class="reel-col">
+          <div class="reel-lbl">Material</div>
+          <div class="reel-window">
+            <div class="reel-row" id="materialAbove">&middot;&middot;&middot;</div>
+            <div class="reel-row payline" id="materialMain">&hellip;</div>
+            <div class="reel-row" id="materialBelow">&middot;&middot;&middot;</div>
+          </div>
+          <button class="nudge-btn" id="nudgeMaterialBtn" onclick="nudge('material')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
+        </div>
+      </div>
+      <div class="spin-row">
+        <button class="btn btn-primary" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
+        <button class="btn btn-cashout" id="cashoutBtn" onclick="cashOut()" disabled>Cash Out</button>
+      </div>
     </div>
-    <div class="reels">
-      <div class="reel-col">
-        <div class="reel-lbl">Size</div>
-        <div class="reel-window" id="reelSize">&hellip;</div>
-        <div class="nudge-row">
-          <button class="nudge-btn" id="nudgeSizeUp" onclick="nudge('size')">&#8635;</button>
-        </div>
-      </div>
-      <div class="reel-col">
-        <div class="reel-lbl">Code</div>
-        <div class="reel-window" id="reelCode">&hellip;</div>
-        <div class="nudge-row">
-          <button class="nudge-btn" id="nudgeCodeUp" onclick="nudge('code')">&#8635;</button>
-        </div>
-      </div>
-      <div class="reel-col">
-        <div class="reel-lbl">Material</div>
-        <div class="reel-window" id="reelMaterial">&hellip;</div>
-        <div class="nudge-row">
-          <button class="nudge-btn" id="nudgeMaterialUp" onclick="nudge('material')">&#8635;</button>
-        </div>
-      </div>
-    </div>
-    <div class="spin-row">
-      <button class="btn btn-primary" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
+    <div class="lever-housing">
+      <div class="lever-rod" id="leverRod"><div class="lever-knob"></div></div>
     </div>
   </div>
 
   <div id="questionArea">
-    <div class="qcard"><div class="idle-msg" id="idleMsg">Loading part number data&hellip;</div></div>
+    <div class="qcard"><div class="idle-msg" id="idleMsg">Loading real SBS part numbers&hellip;</div></div>
   </div>
 
-  <div class="foot-note">Nudge &#8635; rerolls just that one reel and asks a question about what changed. Full Spin rerolls everything.</div>
+  <div class="foot-note">Nudge &#8635; swaps in another real part number that changes just that reel where one exists. Full Spin rerolls everything. Cash Out unlocks after 3 spins.</div>
 </div>
 
 <script>
 // ───────────────────────── CONFIG ─────────────────────────
-// Paste your deployed Google Apps Script Web App URL below (see SETUP.md).
-// Leave blank to run on the small built-in fallback data set.
 const CONFIG = {
   API_URL: "https://script.google.com/macros/s/AKfycbx0V_uys2rOZn5Sep-dFy925QM-S5ZHiRGS120uDj2ZhxhVH7Zaesf_Y9KUQgaRdimHew/exec"
 };
 
-// Small built-in fallback so the tool still works before the Sheet is wired up.
-const FALLBACK_CODES = [
-  {Code:"ACN",Meaning:"Acorn Nut",Family:"Nuts"},
-  {Code:"ALN",Meaning:"Allenuts",Family:"Nuts"},
-  {Code:"CAN",Meaning:"Hex Castle Nut",Family:"Nuts"},
-  {Code:"CDS",Meaning:"Coarse Drywall Screw",Family:"Screws"},
-  {Code:"ASA",Meaning:"Acorn Sleeve Anchor",Family:"Anchors & Inserts"},
-  {Code:"AAC",Meaning:"Closed-End Rivet, Aluminum/Aluminum",Family:"Rivets"},
-  {Code:"ABR",Meaning:"Aluminum Brazier Head Rivet",Family:"Rivets"},
-  {Code:"BTS",Meaning:"Brass Tip Set Screw",Family:"Screws"},
+// Small built-in fallback (real PIM-sourced rows) so the tool still works before the Sheet is wired up.
+const FALLBACK_REALPARTS = [
+  {PartNumber:"100C1000HCS2G",SizePrefix:"100C1000",Code:"HCS",CodeMeaning:"Hex Cap Screw",Family:"Screws",Suffix:"2G",MaterialCode:"2",MaterialMeaning:"Class 12.9 - metric ultra-high-strength steel"},
+  {PartNumber:"100CHEN8Y",SizePrefix:"100C",Code:"HEN",CodeMeaning:"Hex Nut",Family:"Nuts",Suffix:"8Y",MaterialCode:"8",MaterialMeaning:"Grade 8 / Class 8.8 - high-strength steel"},
+  {PartNumber:"37C200HAB-Z",SizePrefix:"37C200",Code:"HAB",CodeMeaning:"Hanger Bolt",Family:"Bolts",Suffix:"-Z",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
+  {PartNumber:"37CALNS",SizePrefix:"37C",Code:"ALN",CodeMeaning:"Allenuts",Family:"Nuts",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {PartNumber:"37CDIAS",SizePrefix:"37C",Code:"DIA",CodeMeaning:"Drop-In Anchor",Family:"Anchors & Inserts",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {PartNumber:"31C125CGBS",SizePrefix:"31C125",Code:"CGB",CodeMeaning:"Carriage Bolt",Family:"Bolts",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {PartNumber:"25CACN-Q",SizePrefix:"25C",Code:"ACN",CodeMeaning:"Acorn Nut",Family:"Nuts",Suffix:"-Q",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
+  {PartNumber:"43C250HTB8Y",SizePrefix:"43C250",Code:"HTB",CodeMeaning:"Hex Tap Bolt",Family:"Bolts",Suffix:"8Y",MaterialCode:"8",MaterialMeaning:"Grade 8 / Class 8.8 - high-strength steel"},
+  {PartNumber:".3C4BTSS",SizePrefix:".3C4",Code:"BTS",CodeMeaning:"Brass Tip Set Screw",Family:"Screws",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {PartNumber:"6CKNSS",SizePrefix:"6C",Code:"KNS",CodeMeaning:"Keps Nut \"Small Patern\"",Family:"Nuts",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {PartNumber:"25C100OSS",SizePrefix:"25C100",Code:"OSS",CodeMeaning:"\"Oval Pt\" Sq Hd Set Screw",Family:"Screws",Suffix:"",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
+  {PartNumber:"12CKTR-Y",SizePrefix:"12C",Code:"KTR",CodeMeaning:"Kaptoggle (3/8-2 1/2 Grip)",Family:"Anchors & Inserts",Suffix:"-Y",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"}
 ];
-const FALLBACK_MATERIALS = [
-  {Code:"S",Meaning:"Stainless Steel A2 (304) - general corrosion resistance"},
-  {Code:"3",Meaning:"Stainless Steel A4 (316) - marine / chemical resistance"},
-  {Code:"8",Meaning:"Grade 8 / Class 8.8 - high-strength steel"},
-  {Code:"1",Meaning:"Class 10.9 - metric high-strength steel"},
-  {Code:"2",Meaning:"Class 12.9 - metric ultra-high-strength steel"},
-  {Code:"5",Meaning:"Grade 5 - inch medium-strength steel"},
-  {Code:"(none)",Meaning:"Plain Steel - no material code means standard steel"},
-];
-// Purely cosmetic reel - not quizzed on, just flavor for the part number look.
-const SIZES = ["#6-32","#8-32","#10-24","1/4-20","5/16-18","3/8-16","7/16-14","1/2-13","M4-0.7","M5-0.8","M6-1.0","M8-1.25"];
 
 // ───────────────────────── STATE ─────────────────────────
-let CODES = [], MATERIALS = [];
-let state = { email:null, score:0, streak:0, spins:0, best:0, reel:{size:null,code:null,material:null}, q:null, answered:false };
+let REALPARTS = [];
+let CODE_GROUPS = {};
+let state = {
+  email:null, credits:5, streak:0, spins:0, best:0,
+  current:null, q:null, answered:false, cashedOut:false
+};
 
 const $ = id => document.getElementById(id);
+const norm = v => (v === null || v === undefined) ? '' : String(v);
 
 // ───────────────────────── INIT ─────────────────────────
 (function init(){
@@ -210,21 +234,37 @@ const $ = id => document.getElementById(id);
 })();
 
 async function loadData(){
+  let rows = [];
   if (CONFIG.API_URL) {
     try {
       const res = await fetch(CONFIG.API_URL, {cache:'no-cache'});
       const json = await res.json();
-      if (json.codes && json.codes.length) CODES = json.codes.filter(c=>c.Code);
-      if (json.materials && json.materials.length) MATERIALS = json.materials.filter(m=>m.Code);
+      if (json.realParts && json.realParts.length) rows = json.realParts;
     } catch(err) {
       console.warn('Could not load from Google Sheet, using fallback data.', err);
     }
   }
-  if (!CODES.length) CODES = FALLBACK_CODES;
-  if (!MATERIALS.length) MATERIALS = FALLBACK_MATERIALS;
-  $('idleMsg').textContent = 'Hit Spin to decode your first SBS part number.';
+  if (!rows.length) rows = FALLBACK_REALPARTS;
+
+  REALPARTS = rows.map(r => ({
+    PartNumber: norm(r.PartNumber),
+    SizePrefix: norm(r.SizePrefix),
+    Code: norm(r.Code),
+    CodeMeaning: norm(r.CodeMeaning),
+    Family: norm(r.Family),
+    Suffix: norm(r.Suffix),
+    MaterialCode: norm(r.MaterialCode),
+    MaterialMeaning: norm(r.MaterialMeaning)
+  })).filter(r => r.PartNumber && r.Code);
+
+  CODE_GROUPS = {};
+  REALPARTS.forEach(r => {
+    (CODE_GROUPS[r.Code] = CODE_GROUPS[r.Code] || []).push(r);
+  });
+
+  $('idleMsg').textContent = 'Hit Spin to decode a real SBS part number.';
   $('spinBtn').disabled = false;
-  randomReels(false);
+  randomReels();
 }
 
 function startGame(){
@@ -239,92 +279,162 @@ function startGame(){
 // ───────────────────────── REELS ─────────────────────────
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-function randomReels(animate){
-  const size = pick(SIZES);
-  const code = pick(CODES);
-  const material = pick(MATERIALS);
-  state.reel = {size, code, material};
-  if (animate) spinAnimate(['reelSize','reelCode','reelMaterial'], [size, code.Code, material.Code]);
-  else renderReels();
+function materialDisplay(code){ return code === '' ? '—' : code; }
+
+function randomReels(){
+  if (!REALPARTS.length) return;
+  state.current = pick(REALPARTS);
+  renderReels();
 }
 
 function renderReels(){
-  $('reelSize').textContent = state.reel.size;
-  $('reelCode').textContent = state.reel.code.Code;
-  $('reelMaterial').textContent = state.reel.material.Code === '(none)' ? '—' : state.reel.material.Code;
-  $('segSize').textContent = state.reel.size;
-  $('segCode').textContent = state.reel.code.Code;
-  $('segMaterial').textContent = state.reel.material.Code === '(none)' ? '' : state.reel.material.Code;
+  const r = state.current;
+  $('sizeMain').textContent = r.SizePrefix;
+  $('codeMain').textContent = r.Code;
+  $('materialMain').textContent = materialDisplay(r.MaterialCode);
+  $('segSize').textContent = r.SizePrefix;
+  $('segCode').textContent = r.Code;
+  $('segMaterial').textContent = r.MaterialCode;
+
+  const others = REALPARTS.filter(x => x !== r);
+  const a = pick(others), b = pick(others);
+  $('sizeAbove').textContent = a.SizePrefix;
+  $('sizeBelow').textContent = b.SizePrefix;
+  $('codeAbove').textContent = a.Code;
+  $('codeBelow').textContent = b.Code;
+  $('materialAbove').textContent = materialDisplay(a.MaterialCode);
+  $('materialBelow').textContent = materialDisplay(b.MaterialCode);
 }
 
-function spinAnimate(ids, finals, cb){
-  const pools = {reelSize:SIZES, reelCode:CODES.map(c=>c.Code), reelMaterial:MATERIALS.map(m=>m.Code)};
-  ids.forEach((id,i)=>{
-    const el = $(id); el.classList.add('spinning');
-    let n = 0; const ticks = 10 + i*4;
-    const t = setInterval(()=>{
-      el.textContent = pick(pools[id]);
-      n++;
-      if (n >= ticks){ clearInterval(t); el.textContent = finals[i]; el.classList.remove('spinning'); renderReels(); if (i===ids.length-1 && cb) cb(); }
-    }, 55);
-  });
+function spinReelAnimation(reelKey, finalRow, cb){
+  const idMain = reelKey + 'Main', idAbove = reelKey + 'Above', idBelow = reelKey + 'Below';
+  const field = reelKey === 'size' ? 'SizePrefix' : (reelKey === 'code' ? 'Code' : 'MaterialCode');
+  const display = v => reelKey === 'material' ? materialDisplay(v) : v;
+  let n = 0; const ticks = 12;
+  const t = setInterval(() => {
+    const r1 = pick(REALPARTS), r2 = pick(REALPARTS);
+    $(idMain).textContent = display(r1[field]);
+    $(idAbove).textContent = display(pick(REALPARTS)[field]);
+    $(idBelow).textContent = display(r2[field]);
+    n++;
+    if (n >= ticks){
+      clearInterval(t);
+      $(idMain).textContent = display(finalRow[field]);
+      if (cb) cb();
+    }
+  }, 55);
 }
 
 // ───────────────────────── SPIN / NUDGE ─────────────────────────
+function pullLever(){
+  const rod = $('leverRod');
+  rod.classList.remove('pulled');
+  void rod.offsetWidth;
+  rod.classList.add('pulled');
+}
+
 function spin(){
-  if (!state.email){ return; } // modal still showing, ignore
+  if (!state.email || state.cashedOut) return;
+  pullLever();
   setControlsEnabled(false);
   state.spins++; $('spinsVal').textContent = state.spins;
-  const size = pick(SIZES), code = pick(CODES), material = pick(MATERIALS);
-  state.reel = {size, code, material};
-  spinAnimate(['reelSize','reelCode','reelMaterial'], [size, code.Code, material.Code === '(none)'?'—':material.Code], ()=>{
-    askQuestion(Math.random() < 0.7 ? 'code' : 'material');
-    setControlsEnabled(true);
-  });
+  updateCashoutAvailability();
+  const next = pick(REALPARTS);
+  state.current = next;
+  let done = 0;
+  const after = () => { done++; if (done === 3){ renderNeighbors(); askQuestion(Math.random() < 0.7 ? 'code' : 'material'); setControlsEnabled(true); } };
+  spinReelAnimation('size', next, after);
+  spinReelAnimation('code', next, after);
+  spinReelAnimation('material', next, after);
+  updateReadout();
+}
+
+function renderNeighbors(){
+  const others = REALPARTS.filter(x => x !== state.current);
+  const a = pick(others), b = pick(others);
+  $('sizeAbove').textContent = a.SizePrefix;
+  $('sizeBelow').textContent = b.SizePrefix;
+  $('codeAbove').textContent = a.Code;
+  $('codeBelow').textContent = b.Code;
+  $('materialAbove').textContent = materialDisplay(a.MaterialCode);
+  $('materialBelow').textContent = materialDisplay(b.MaterialCode);
+}
+
+function updateReadout(){
+  $('segSize').textContent = state.current.SizePrefix;
+  $('segCode').textContent = state.current.Code;
+  $('segMaterial').textContent = state.current.MaterialCode;
 }
 
 function nudge(which){
-  if (!state.email || !state.reel.code) return;
+  if (!state.email || state.cashedOut || !state.current) return;
+  pullLever();
   setControlsEnabled(false);
+  const cur = state.current;
+
   if (which === 'size'){
-    const size = pick(SIZES); state.reel.size = size;
-    spinAnimate(['reelSize'], [size], ()=>setControlsEnabled(true));
+    const group = CODE_GROUPS[cur.Code] || [];
+    const options = group.filter(r => r.SizePrefix !== cur.SizePrefix);
+    const next = options.length ? pick(options) : pick(REALPARTS);
+    state.current = next;
+    updateReadout();
+    spinReelAnimation('size', next, () => setControlsEnabled(true));
     return;
   }
+
   state.spins++; $('spinsVal').textContent = state.spins;
+  updateCashoutAvailability();
+
   if (which === 'code'){
-    const code = pick(CODES); state.reel.code = code;
-    spinAnimate(['reelCode'], [code.Code], ()=>{ askQuestion('code'); setControlsEnabled(true); });
+    const options = REALPARTS.filter(r => r.Code !== cur.Code);
+    const next = options.length ? pick(options) : pick(REALPARTS);
+    state.current = next;
+    updateReadout();
+    spinReelAnimation('code', next, () => { renderNeighbors(); askQuestion('code'); setControlsEnabled(true); });
   } else {
-    const material = pick(MATERIALS); state.reel.material = material;
-    spinAnimate(['reelMaterial'], [material.Code === '(none)'?'—':material.Code], ()=>{ askQuestion('material'); setControlsEnabled(true); });
+    const group = CODE_GROUPS[cur.Code] || [];
+    const diffMaterial = group.filter(r => r.MaterialCode !== cur.MaterialCode);
+    const next = diffMaterial.length ? pick(diffMaterial) : pick(REALPARTS.filter(r => r.Code !== cur.Code));
+    state.current = next;
+    updateReadout();
+    spinReelAnimation('material', next, () => { renderNeighbors(); askQuestion('material'); setControlsEnabled(true); });
   }
 }
 
 function setControlsEnabled(on){
-  $('spinBtn').disabled = !on;
-  ['nudgeSizeUp','nudgeCodeUp','nudgeMaterialUp'].forEach(id=>$(id).disabled = !on);
+  $('spinBtn').disabled = !on || state.cashedOut;
+  ['nudgeSizeBtn','nudgeCodeBtn','nudgeMaterialBtn'].forEach(id => $(id).disabled = !on || state.cashedOut);
+  updateCashoutAvailability();
+}
+
+function updateCashoutAvailability(){
+  $('cashoutBtn').disabled = state.cashedOut || state.spins < 3;
 }
 
 // ───────────────────────── QUESTION ─────────────────────────
 function askQuestion(segment){
-  const pool = segment === 'code' ? CODES : MATERIALS;
-  const correctItem = segment === 'code' ? state.reel.code : state.reel.material;
-  const valueLabel = correctItem.Code === '(none)' ? 'no material code' : correctItem.Code;
-  const others = pool.filter(p => p.Code !== correctItem.Code);
-  const distractors = shuffle(others).slice(0,3).map(p=>p.Meaning);
-  const options = shuffle([correctItem.Meaning, ...distractors]);
+  const r = state.current;
+  const isCode = segment === 'code';
+  const correctMeaning = isCode ? r.CodeMeaning : r.MaterialMeaning;
+  const valueLabel = isCode ? r.Code : (r.MaterialCode === '' ? 'no material code' : r.MaterialCode);
 
-  state.q = { segment, correctMeaning: correctItem.Meaning, options };
+  const pool = isCode
+    ? REALPARTS.filter(x => x.Code !== r.Code).map(x => x.CodeMeaning)
+    : REALPARTS.filter(x => x.MaterialCode !== r.MaterialCode).map(x => x.MaterialMeaning);
+  const uniquePool = Array.from(new Set(pool)).filter(m => m !== correctMeaning);
+  const distractors = shuffle(uniquePool).slice(0,3);
+  const options = shuffle([correctMeaning, ...distractors]);
+
+  state.q = { segment, correctMeaning, options };
   state.answered = false;
 
-  const prompt = segment === 'code'
-    ? `On this part number, what does the code <strong>${valueLabel}</strong> mean?`
-    : `On this part number, what does the material code <strong>${valueLabel}</strong> mean?`;
+  const prompt = isCode
+    ? `On <strong>${r.PartNumber}</strong>, what does the code <strong>${valueLabel}</strong> mean?`
+    : `On <strong>${r.PartNumber}</strong>, what does the material code <strong>${valueLabel}</strong> mean?`;
 
   const html = `
     <div class="qcard">
-      <div class="q-hint">${segment === 'code' ? 'Part type code' : 'Material code'}</div>
+      <div class="q-hint">${isCode ? 'Part type code' : 'Material code'} &bull; real SBS part number</div>
       <div class="q-prompt">${prompt}</div>
       <div class="choices" id="choicesWrap">
         ${options.map((opt,i)=>`<button class="choice" onclick="answer(${i})">${opt}</button>`).join('')}
@@ -352,37 +462,44 @@ function answer(i){
     else if (b === btns[i]) b.classList.add('wrong');
   });
 
-  if (correct){
-    state.score += 10; state.streak += 1;
-  } else {
-    state.streak = 0;
-  }
-  $('scoreVal').textContent = state.score;
+  if (correct){ state.credits += 2; state.streak += 1; }
+  else { state.streak = 0; }
+  $('creditsVal').textContent = state.credits;
   $('streakVal').textContent = state.streak;
-  if (state.score > state.best){ state.best = state.score; $('bestVal').textContent = state.best; localStorage.setItem('sbsQuizBest', state.best); }
 
   $('explainArea').innerHTML = `
-    <div class="explain">${correct ? '✅ Correct! ' : '❌ Not quite. '}<strong>${state.q.correctMeaning}</strong></div>
+    <div class="explain">${correct ? '✅ Correct! +2 credits. ' : '❌ Not quite, no credits this round. '}<strong>${state.q.correctMeaning}</strong></div>
     <div class="next-row"><button class="btn btn-outline" onclick="spin()">Spin again &rarr;</button></div>`;
 
-  submitResult(correct);
+  submitResult(correct, false);
+}
+
+// ───────────────────────── CASH OUT ─────────────────────────
+function cashOut(){
+  if (state.cashedOut || state.spins < 3) return;
+  state.cashedOut = true;
+  if (state.credits > state.best){ state.best = state.credits; $('bestVal').textContent = state.best; localStorage.setItem('sbsQuizBest', state.best); }
+  setControlsEnabled(false);
+  $('cashoutBtn').disabled = true;
+  $('questionArea').innerHTML = `
+    <div class="cashout-banner">
+      <div class="big">${state.credits} credits</div>
+      <p>Cashed out after ${state.spins} spins. Refresh the page to play again.</p>
+    </div>`;
+  submitResult(null, true);
 }
 
 // ───────────────────────── BACKEND ─────────────────────────
-function assembledPartNumber(){
-  const mat = state.reel.material.Code === '(none)' ? '' : state.reel.material.Code;
-  return `${state.reel.size} ${state.reel.code.Code}${mat}`;
-}
-
-function submitResult(correct){
-  if (!CONFIG.API_URL) return; // no backend configured yet
+function submitResult(correct, cashedOut){
+  if (!CONFIG.API_URL) return;
   const payload = {
     email: state.email,
-    score: state.score,
+    credits: state.credits,
     spins: state.spins,
-    partNumber: assembledPartNumber(),
-    lastQuestion: state.q.segment,
-    correct: correct
+    partNumber: state.current ? state.current.PartNumber : '',
+    lastQuestion: state.q ? state.q.segment : '',
+    correct: correct,
+    cashedOut: !!cashedOut
   };
   fetch(CONFIG.API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) }).catch(()=>{});
 }
