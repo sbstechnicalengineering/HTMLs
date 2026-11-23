@@ -20,7 +20,7 @@
   --r:8px;--shadow:0 4px 16px rgba(0,0,0,.12)
 }
 body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-height:100vh;font-size:14px;line-height:1.5}
-.wrap{max-width:640px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+.wrap{max-width:720px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
 
 .hdr{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:0.65rem 1.25rem;background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:50;box-shadow:var(--shadow);margin-left:-1.25rem;margin-right:-1.25rem;width:calc(100% + 2.5rem)}
 .hdr-icon{width:40px;height:40px;background:var(--navy);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
@@ -33,30 +33,28 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .score-l{font-size:8.5px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
 
 .machine-row{display:flex;align-items:stretch;gap:0;margin-bottom:1rem}
-.cabinet{flex:1;background:var(--navy);border-radius:14px 0 0 14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow)}
-.lever-housing{width:48px;background:var(--navy-darker);border-radius:0 14px 14px 0;box-shadow:var(--shadow);display:flex;justify-content:center;padding-top:14px;position:relative;overflow:visible}
+.cabinet{flex:1;min-width:0;background:var(--navy);border-radius:14px 0 0 14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow)}
+.lever-housing{width:48px;background:var(--navy-darker);border-radius:0 14px 14px 0;box-shadow:var(--shadow);display:flex;justify-content:center;padding-top:14px;position:relative;overflow:visible;flex-shrink:0}
 .lever-rod{width:7px;height:84px;background:linear-gradient(180deg,#C9CDD2,#7A8088);border-radius:4px;transform-origin:top center;position:relative}
 .lever-knob{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--orange);box-shadow:0 2px 4px rgba(0,0,0,.4),inset 0 -2px 3px rgba(0,0,0,.25)}
 .lever-rod.pulled{animation:leverPull .55s cubic-bezier(.3,0,.5,1)}
 @keyframes leverPull{0%{transform:rotate(0deg)}45%{transform:rotate(32deg)}100%{transform:rotate(0deg)}}
 
-.pn-readout{background:var(--navy-dark);border-radius:8px;padding:10px 14px;margin-bottom:1rem;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px}
-.pn-seg{font-family:var(--mono);font-size:18px;font-weight:600;color:#fff;padding:2px 6px;border-radius:4px}
-.pn-seg.size{background:#5C5A54}
-.pn-seg.code{background:var(--orange)}
-.pn-seg.material{background:#2A7A3C}
-
-.reels{display:flex;gap:10px}
-.reel-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
-.reel-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.reels-scroll{overflow-x:auto;padding-bottom:2px}
+.reels{display:flex;gap:6px;min-width:min-content}
+.reel-col{flex:1;min-width:38px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.reel-col.is-null{opacity:.28}
+.reel-lbl{font-size:8.5px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.04em;font-weight:600;height:11px;white-space:nowrap}
 .reel-window{width:100%;background:#fff;border-radius:8px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
-.reel-row{height:26px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--gray-400);background:var(--gray-100);letter-spacing:.02em;overflow:hidden;white-space:nowrap;padding:0 2px}
-.reel-row.payline{height:32px;font-size:15px;font-weight:700;color:var(--navy);background:var(--orange-pale);border-top:2px solid var(--orange);border-bottom:2px solid var(--orange)}
-.nudge-btn{display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;padding:5px 2px;border:none;border-radius:6px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;transition:background .12s}
+.reel-row{height:24px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;font-weight:600;color:var(--gray-400);background:var(--gray-100);letter-spacing:.01em;overflow:hidden;white-space:nowrap;padding:0 2px}
+.reel-row.payline{height:30px;font-size:13px;font-weight:700;color:var(--navy);background:var(--orange-pale);border-top:2px solid var(--orange);border-bottom:2px solid var(--orange)}
+.reel-col.is-null .reel-row{color:var(--gray-300);background:var(--gray-50)}
+.reel-col.is-null .reel-row.payline{border-color:var(--gray-300);background:var(--gray-100)}
+.nudge-btn{display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;padding:4px 1px;border:none;border-radius:6px;background:rgba(255,255,255,.14);color:#fff;cursor:pointer;transition:background .12s}
 .nudge-btn:hover:not(:disabled){background:rgba(255,255,255,.26)}
-.nudge-btn:disabled{opacity:.3;cursor:default}
-.nudge-ico{font-size:13px;line-height:1}
-.nudge-txt{font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-family:"Barlow",sans-serif}
+.nudge-btn:disabled{opacity:.25;cursor:default}
+.nudge-ico{font-size:11px;line-height:1}
+.nudge-txt{font-size:6.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-family:"Barlow",sans-serif}
 
 .spin-row{margin-top:1.1rem;text-align:center;display:flex;gap:8px;justify-content:center}
 .btn{padding:11px 22px;border:none;border-radius:var(--r);font-family:"Barlow",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em}
@@ -101,8 +99,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 
 @media(max-width:480px){
   .wrap{padding:1rem 1rem 2.5rem}
-  .pn-seg{font-size:14px}
-  .reel-row.payline{font-size:13px}
+  .reel-row.payline{font-size:12px}
 }
 </style>
 </head>
@@ -140,39 +137,8 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 
   <div class="machine-row">
     <div class="cabinet">
-      <div class="pn-readout" id="pnReadout">
-        <span class="pn-seg size" id="segSize">&hellip;</span>
-        <span class="pn-seg code" id="segCode">&hellip;</span>
-        <span class="pn-seg material" id="segMaterial">&hellip;</span>
-      </div>
-      <div class="reels">
-        <div class="reel-col">
-          <div class="reel-lbl">Size</div>
-          <div class="reel-window">
-            <div class="reel-row" id="sizeAbove">&middot;&middot;&middot;</div>
-            <div class="reel-row payline" id="sizeMain">&hellip;</div>
-            <div class="reel-row" id="sizeBelow">&middot;&middot;&middot;</div>
-          </div>
-          <button class="nudge-btn" id="nudgeSizeBtn" onclick="nudge('size')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
-        </div>
-        <div class="reel-col">
-          <div class="reel-lbl">Code</div>
-          <div class="reel-window">
-            <div class="reel-row" id="codeAbove">&middot;&middot;&middot;</div>
-            <div class="reel-row payline" id="codeMain">&hellip;</div>
-            <div class="reel-row" id="codeBelow">&middot;&middot;&middot;</div>
-          </div>
-          <button class="nudge-btn" id="nudgeCodeBtn" onclick="nudge('code')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
-        </div>
-        <div class="reel-col">
-          <div class="reel-lbl">Material</div>
-          <div class="reel-window">
-            <div class="reel-row" id="materialAbove">&middot;&middot;&middot;</div>
-            <div class="reel-row payline" id="materialMain">&hellip;</div>
-            <div class="reel-row" id="materialBelow">&middot;&middot;&middot;</div>
-          </div>
-          <button class="nudge-btn" id="nudgeMaterialBtn" onclick="nudge('material')"><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
-        </div>
+      <div class="reels-scroll">
+        <div class="reels" id="reelsWrap"></div>
       </div>
       <div class="spin-row">
         <button class="btn btn-primary" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
@@ -188,7 +154,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
     <div class="qcard"><div class="idle-msg" id="idleMsg">Loading real SBS part numbers&hellip;</div></div>
   </div>
 
-  <div class="foot-note">Nudge &#8635; swaps in another real part number that changes just that reel where one exists. Full Spin rerolls everything. Cash Out unlocks after 3 spins.</div>
+  <div class="foot-note">Nudge &#8635; swaps in another real part that changes just that reel where one exists. Full Spin rerolls everything. Cash Out unlocks after 3 spins.</div>
 </div>
 
 <script>
@@ -210,8 +176,15 @@ const FALLBACK_REALPARTS = [
   {PartNumber:".3C4BTSS",SizePrefix:".3C4",Code:"BTS",CodeMeaning:"Brass Tip Set Screw",Family:"Screws",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
   {PartNumber:"6CKNSS",SizePrefix:"6C",Code:"KNS",CodeMeaning:"Keps Nut \"Small Patern\"",Family:"Nuts",Suffix:"S",MaterialCode:"S",MaterialMeaning:"Stainless Steel A2 (304) - general corrosion resistance"},
   {PartNumber:"25C100OSS",SizePrefix:"25C100",Code:"OSS",CodeMeaning:"\"Oval Pt\" Sq Hd Set Screw",Family:"Screws",Suffix:"",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
-  {PartNumber:"12CKTR-Y",SizePrefix:"12C",Code:"KTR",CodeMeaning:"Kaptoggle (3/8-2 1/2 Grip)",Family:"Anchors & Inserts",Suffix:"-Y",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"}
+  {PartNumber:"12CKTR-Y",SizePrefix:"12C",Code:"KTR",CodeMeaning:"Kaptoggle (3/8-2 1/2 Grip)",Family:"Anchors & Inserts",Suffix:"-Y",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
+  {PartNumber:".10C140MHCS",SizePrefix:".10C140M",Code:"HCS",CodeMeaning:"Hex Cap Screw",Family:"Screws",Suffix:"",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"},
+  {PartNumber:"43C225KSS",SizePrefix:"43C225",Code:"KSS",CodeMeaning:"\"Knurl Pt\" Sq Hd Set Screw",Family:"Screws",Suffix:"",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"}
 ];
+
+const MATERIAL_CHARS = new Set(['S','3','8','1','2','5']);
+const KIND_ORDER = ['diameter','thread','length','modifier','code','material','suffix','slash'];
+const KIND_LABEL = {diameter:'Diameter',thread:'Thread',length:'Length',modifier:'Metric',code:'Code',material:'Material',suffix:'Suffix',slash:'Ext.'};
+const WHEEL_COUNT = 8;
 
 // ───────────────────────── STATE ─────────────────────────
 let REALPARTS = [];
@@ -224,12 +197,55 @@ let state = {
 const $ = id => document.getElementById(id);
 const norm = v => (v === null || v === undefined) ? '' : String(v);
 
+// ───────────────────────── PART NUMBER SEGMENTATION ─────────────────────────
+// Splits a part number into up to 8 reels: Diameter, Thread, Length, Metric-modifier,
+// Code, Material, Suffix, and a trailing "/..." extension — in that order, with any
+// reel that has nothing real to show for this part simply left out (and the empty
+// slots pushed to the right, same as a real slot machine with unused reels).
+function splitPrefix(sizePrefix){
+  const m = String(sizePrefix||'').match(/^(\.?\d+)([A-Za-z]{0,2})(\d*)([A-Za-z]{0,2})$/);
+  if (!m) return { diameter: sizePrefix||'', thread:'', length:'', modifier:'' };
+  return { diameter: m[1]||'', thread: m[2]||'', length: m[3]||'', modifier: m[4]||'' };
+}
+
+function splitSuffix(suffix, materialCode){
+  const full = String(suffix||'');
+  let main = full, slash = '';
+  const si = full.indexOf('/');
+  if (si !== -1){ main = full.slice(0, si); slash = full.slice(si); }
+  let remainder = main;
+  if (materialCode){
+    const dashStripped = main.replace(/^-/, '');
+    if (dashStripped.indexOf(materialCode) === 0){
+      const dashLen = main.length - dashStripped.length;
+      remainder = main.slice(dashLen + materialCode.length);
+    }
+  }
+  return { remainder, slash };
+}
+
+function buildByKind(r){
+  const p = splitPrefix(r.SizePrefix);
+  const s = splitSuffix(r.Suffix, r.MaterialCode);
+  return {
+    diameter: p.diameter, thread: p.thread, length: p.length, modifier: p.modifier,
+    code: r.Code, material: r.MaterialCode || '', suffix: s.remainder, slash: s.slash
+  };
+}
+
+function attachWheels(r){
+  r.byKind = buildByKind(r);
+  r.compact = KIND_ORDER.filter(k => r.byKind[k]).map(k => ({ kind:k, text:r.byKind[k] }));
+  return r;
+}
+
 // ───────────────────────── INIT ─────────────────────────
 (function init(){
   const savedEmail = localStorage.getItem('sbsQuizEmail');
   const savedBest = parseInt(localStorage.getItem('sbsQuizBest')||'0',10);
   state.best = savedBest; $('bestVal').textContent = savedBest;
   if (savedEmail) { state.email = savedEmail; $('emailModal').remove(); }
+  buildReelSkeleton();
   loadData();
 })();
 
@@ -246,7 +262,7 @@ async function loadData(){
   }
   if (!rows.length) rows = FALLBACK_REALPARTS;
 
-  REALPARTS = rows.map(r => ({
+  REALPARTS = rows.map(r => attachWheels({
     PartNumber: norm(r.PartNumber),
     SizePrefix: norm(r.SizePrefix),
     Code: norm(r.Code),
@@ -279,48 +295,91 @@ function startGame(){
 // ───────────────────────── REELS ─────────────────────────
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-function materialDisplay(code){ return code === '' ? '—' : code; }
+function buildReelSkeleton(){
+  let html = '';
+  for (let i = 0; i < WHEEL_COUNT; i++){
+    html += `
+      <div class="reel-col" id="col${i}">
+        <div class="reel-lbl" id="lbl${i}">&nbsp;</div>
+        <div class="reel-window">
+          <div class="reel-row" id="above${i}">&middot;&middot;&middot;</div>
+          <div class="reel-row payline" id="main${i}">&hellip;</div>
+          <div class="reel-row" id="below${i}">&middot;&middot;&middot;</div>
+        </div>
+        <button class="nudge-btn" id="nudgeBtn${i}" onclick="nudge(${i})" disabled><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
+      </div>`;
+  }
+  $('reelsWrap').innerHTML = html;
+}
+
+function neighborFor(kind, exclude){
+  const pool = REALPARTS.filter(r => r !== exclude && r.byKind[kind]);
+  if (!pool.length) return '';
+  return pick(pool).byKind[kind];
+}
+
+// Updates just the structural bits (labels, which reels are "null" / greyed
+// because this part number is shorter) so labels never lag behind mid-animation.
+function syncStructure(r){
+  const compact = r.compact;
+  for (let i = 0; i < WHEEL_COUNT; i++){
+    const col = $('col'+i);
+    if (i < compact.length){
+      col.classList.remove('is-null');
+      $('lbl'+i).textContent = KIND_LABEL[compact[i].kind];
+    } else {
+      col.classList.add('is-null');
+      $('lbl'+i).innerHTML = '&nbsp;';
+      $('main'+i).textContent = '—';
+      $('above'+i).textContent = '';
+      $('below'+i).textContent = '';
+      $('nudgeBtn'+i).disabled = true;
+    }
+  }
+}
+
+// Renders every reel to match `r` exactly (labels, payline text, dimmed neighbors,
+// and which reels are "null" / greyed because this part number is shorter).
+function renderAllStatic(r){
+  syncStructure(r);
+  const compact = r.compact;
+  for (let i = 0; i < compact.length; i++){
+    const kind = compact[i].kind;
+    $('main'+i).textContent = compact[i].text;
+    $('above'+i).textContent = neighborFor(kind, r) || '···';
+    $('below'+i).textContent = neighborFor(kind, r) || '···';
+    $('nudgeBtn'+i).disabled = state.cashedOut;
+  }
+}
 
 function randomReels(){
   if (!REALPARTS.length) return;
   state.current = pick(REALPARTS);
-  renderReels();
+  renderAllStatic(state.current);
 }
 
-function renderReels(){
-  const r = state.current;
-  $('sizeMain').textContent = r.SizePrefix;
-  $('codeMain').textContent = r.Code;
-  $('materialMain').textContent = materialDisplay(r.MaterialCode);
-  $('segSize').textContent = r.SizePrefix;
-  $('segCode').textContent = r.Code;
-  $('segMaterial').textContent = r.MaterialCode;
-
-  const others = REALPARTS.filter(x => x !== r);
-  const a = pick(others), b = pick(others);
-  $('sizeAbove').textContent = a.SizePrefix;
-  $('sizeBelow').textContent = b.SizePrefix;
-  $('codeAbove').textContent = a.Code;
-  $('codeBelow').textContent = b.Code;
-  $('materialAbove').textContent = materialDisplay(a.MaterialCode);
-  $('materialBelow').textContent = materialDisplay(b.MaterialCode);
-}
-
-function spinReelAnimation(reelKey, finalRow, cb){
-  const idMain = reelKey + 'Main', idAbove = reelKey + 'Above', idBelow = reelKey + 'Below';
-  const field = reelKey === 'size' ? 'SizePrefix' : (reelKey === 'code' ? 'Code' : 'MaterialCode');
-  const display = v => reelKey === 'material' ? materialDisplay(v) : v;
-  let n = 0; const ticks = 12;
+// Animates reel `i` ticking through random real values of the same kind as the
+// target part's reel `i`, landing on the target's real value.
+function animateWheel(i, targetRow, cb){
+  const compact = targetRow.compact;
+  if (i >= compact.length){
+    if (cb) cb();
+    return;
+  }
+  const kind = compact[i].kind;
+  let n = 0; const ticks = 10;
   const t = setInterval(() => {
-    const r1 = pick(REALPARTS), r2 = pick(REALPARTS);
-    $(idMain).textContent = display(r1[field]);
-    $(idAbove).textContent = display(pick(REALPARTS)[field]);
-    $(idBelow).textContent = display(r2[field]);
     n++;
     if (n >= ticks){
       clearInterval(t);
-      $(idMain).textContent = display(finalRow[field]);
+      $('main'+i).textContent = compact[i].text;
+      $('above'+i).textContent = neighborFor(kind, targetRow) || '···';
+      $('below'+i).textContent = neighborFor(kind, targetRow) || '···';
       if (cb) cb();
+    } else {
+      $('main'+i).textContent = neighborFor(kind, null) || compact[i].text;
+      $('above'+i).textContent = neighborFor(kind, null) || '···';
+      $('below'+i).textContent = neighborFor(kind, null) || '···';
     }
   }, 55);
 }
@@ -340,70 +399,63 @@ function spin(){
   state.spins++; $('spinsVal').textContent = state.spins;
   updateCashoutAvailability();
   const next = pick(REALPARTS);
-  state.current = next;
+  syncStructure(next);
+
   let done = 0;
-  const after = () => { done++; if (done === 3){ renderNeighbors(); askQuestion(Math.random() < 0.7 ? 'code' : 'material'); setControlsEnabled(true); } };
-  spinReelAnimation('size', next, after);
-  spinReelAnimation('code', next, after);
-  spinReelAnimation('material', next, after);
-  updateReadout();
+  const wheelsToAnimate = Math.max(next.compact.length, state.current ? state.current.compact.length : 0, 1);
+  const after = () => {
+    done++;
+    if (done === wheelsToAnimate){
+      state.current = next;
+      renderAllStatic(next);
+      askQuestion(Math.random() < 0.7 ? 'code' : 'material');
+      setControlsEnabled(true);
+    }
+  };
+  for (let i = 0; i < wheelsToAnimate; i++) animateWheel(i, next, after);
 }
 
-function renderNeighbors(){
-  const others = REALPARTS.filter(x => x !== state.current);
-  const a = pick(others), b = pick(others);
-  $('sizeAbove').textContent = a.SizePrefix;
-  $('sizeBelow').textContent = b.SizePrefix;
-  $('codeAbove').textContent = a.Code;
-  $('codeBelow').textContent = b.Code;
-  $('materialAbove').textContent = materialDisplay(a.MaterialCode);
-  $('materialBelow').textContent = materialDisplay(b.MaterialCode);
-}
-
-function updateReadout(){
-  $('segSize').textContent = state.current.SizePrefix;
-  $('segCode').textContent = state.current.Code;
-  $('segMaterial').textContent = state.current.MaterialCode;
-}
-
-function nudge(which){
+function nudge(i){
   if (!state.email || state.cashedOut || !state.current) return;
+  const compact = state.current.compact;
+  if (i >= compact.length) return;
+  const kind = compact[i].kind;
+  const cur = state.current;
+  const group = CODE_GROUPS[cur.Code] || [];
+
   pullLever();
   setControlsEnabled(false);
-  const cur = state.current;
 
-  if (which === 'size'){
-    const group = CODE_GROUPS[cur.Code] || [];
-    const options = group.filter(r => r.SizePrefix !== cur.SizePrefix);
-    const next = options.length ? pick(options) : pick(REALPARTS);
-    state.current = next;
-    updateReadout();
-    spinReelAnimation('size', next, () => setControlsEnabled(true));
-    return;
-  }
-
-  state.spins++; $('spinsVal').textContent = state.spins;
-  updateCashoutAvailability();
-
-  if (which === 'code'){
+  let next;
+  if (kind === 'code'){
     const options = REALPARTS.filter(r => r.Code !== cur.Code);
-    const next = options.length ? pick(options) : pick(REALPARTS);
-    state.current = next;
-    updateReadout();
-    spinReelAnimation('code', next, () => { renderNeighbors(); askQuestion('code'); setControlsEnabled(true); });
+    next = options.length ? pick(options) : pick(REALPARTS);
+  } else if (kind === 'material'){
+    const options = group.filter(r => r.MaterialCode !== cur.MaterialCode);
+    next = options.length ? pick(options) : pick(REALPARTS.filter(r => r.Code !== cur.Code));
   } else {
-    const group = CODE_GROUPS[cur.Code] || [];
-    const diffMaterial = group.filter(r => r.MaterialCode !== cur.MaterialCode);
-    const next = diffMaterial.length ? pick(diffMaterial) : pick(REALPARTS.filter(r => r.Code !== cur.Code));
-    state.current = next;
-    updateReadout();
-    spinReelAnimation('material', next, () => { renderNeighbors(); askQuestion('material'); setControlsEnabled(true); });
+    const options = group.filter(r => r.byKind[kind] !== cur.byKind[kind]);
+    next = options.length ? pick(options) : pick(REALPARTS);
   }
+
+  const quizzes = (kind === 'code' || kind === 'material');
+  if (quizzes){ state.spins++; $('spinsVal').textContent = state.spins; updateCashoutAvailability(); }
+
+  // Instantly resync every other reel to the new part, then animate just this one.
+  state.current = next;
+  renderAllStatic(next);
+  animateWheel(i, next, () => {
+    if (quizzes) askQuestion(kind);
+    setControlsEnabled(true);
+  });
 }
 
 function setControlsEnabled(on){
   $('spinBtn').disabled = !on || state.cashedOut;
-  ['nudgeSizeBtn','nudgeCodeBtn','nudgeMaterialBtn'].forEach(id => $(id).disabled = !on || state.cashedOut);
+  const compact = state.current ? state.current.compact : [];
+  for (let i = 0; i < WHEEL_COUNT; i++){
+    $('nudgeBtn'+i).disabled = !on || state.cashedOut || i >= compact.length;
+  }
   updateCashoutAvailability();
 }
 
