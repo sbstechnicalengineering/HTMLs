@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBS Part Number Slot Machine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1D3557;--navy-dark:#12243a;
+  --orange:#E87722;--orange-light:#F0913A;--orange-pale:#FDF0E5;
+  --white:#ffffff;
+  --gray-50:#F8F9FA;--gray-100:#F0F2F5;--gray-200:#E2E6EA;
+  --gray-300:#CED4DA;--gray-400:#ADB5BD;--gray-500:#6C757D;--gray-600:#495057;--gray-700:#343A40;
+  --green:#1A8A4A;--green-bg:#E8F5EE;--green-border:#A8D9BC;
+  --red:#C0392B;--red-bg:#FCECEA;--red-border:#EBB5AD;
+  --mono:'Barlow',monospace;--sans:'Inter',sans-serif;
+  --r:8px;--shadow:0 4px 16px rgba(0,0,0,.12)
+}
+body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-height:100vh;font-size:14px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
+
+.hdr{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:0.65rem 1.25rem;background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:50;box-shadow:var(--shadow);margin-left:-1.25rem;margin-right:-1.25rem;width:calc(100% + 2.5rem)}
+.hdr-icon{width:40px;height:40px;background:var(--navy);border-radius:var(--r);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.hdr-title{font-size:20px;font-weight:800;letter-spacing:-.01em;font-family:"Barlow Condensed",sans-serif;color:var(--navy);text-transform:uppercase}
+.hdr-sub{font-size:11px;color:var(--gray-500);margin-top:1px}
+
+.scorebar{display:flex;gap:8px;margin-bottom:1rem}
+.score-tile{flex:1;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:8px 10px;text-align:center}
+.score-n{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:800;color:var(--navy)}
+.score-l{font-size:9px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+
+.cabinet{background:var(--navy);border-radius:14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
+.pn-readout{background:var(--navy-dark);border-radius:8px;padding:10px 14px;margin-bottom:1rem;text-align:center;min-height:40px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px}
+.pn-seg{font-family:var(--mono);font-size:19px;font-weight:600;color:#fff;padding:2px 6px;border-radius:4px}
+.pn-seg.size{background:#5C5A54}
+.pn-seg.code{background:var(--orange)}
+.pn-seg.material{background:#2A7A3C}
+
+.reels{display:flex;gap:10px}
+.reel-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.reel-lbl{font-size:10px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.reel-window{width:100%;background:#fff;border-radius:8px;padding:14px 6px;text-align:center;font-family:var(--mono);font-size:20px;font-weight:700;color:var(--navy);min-height:28px;overflow:hidden;box-shadow:inset 0 2px 6px rgba(0,0,0,.25)}
+.reel-window.spinning{color:var(--gray-400)}
+.nudge-row{display:flex;gap:4px}
+.nudge-btn{width:32px;height:28px;border:none;border-radius:6px;background:rgba(255,255,255,.14);color:#fff;font-size:13px;cursor:pointer;transition:background .12s;display:flex;align-items:center;justify-content:center}
+.nudge-btn:hover{background:rgba(255,255,255,.26)}
+.nudge-btn:disabled{opacity:.3;cursor:default}
+
+.spin-row{margin-top:1.1rem;text-align:center}
+.btn{padding:11px 28px;border:none;border-radius:var(--r);font-family:"Barlow",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em}
+.btn-primary{background:var(--orange);color:#fff;box-shadow:0 2px 8px rgba(232,119,34,.4)}
+.btn-primary:hover:not(:disabled){background:var(--orange-light);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.45;cursor:default;transform:none}
+.btn-outline{background:transparent;border:1px solid var(--gray-300);color:var(--gray-600)}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy)}
+
+.qcard{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--r);padding:1.1rem 1.2rem;box-shadow:var(--shadow)}
+.q-hint{font-size:10px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:6px}
+.q-prompt{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px;font-family:"Barlow",sans-serif}
+.choices{display:flex;flex-direction:column;gap:7px}
+.choice{text-align:left;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--r);background:var(--white);font-size:13px;color:var(--navy);cursor:pointer;transition:all .12s;font-family:var(--sans)}
+.choice:hover:not(:disabled){border-color:var(--orange);background:var(--orange-pale)}
+.choice.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green);font-weight:600}
+.choice.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
+.choice:disabled{cursor:default}
+.explain{margin-top:12px;padding:10px 12px;border-radius:var(--r);font-size:12.5px;background:var(--gray-50);border:1px solid var(--gray-200);color:var(--gray-700)}
+.next-row{margin-top:12px;text-align:right}
+
+.idle-msg{text-align:center;color:var(--gray-500);font-size:13px;padding:1.5rem 0}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(29,53,87,.72);z-index:999;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:#fff;border-radius:12px;max-width:380px;width:100%;box-shadow:0 8px 40px rgba(29,53,87,.3);overflow:hidden}
+.modal-hdr{background:var(--navy);padding:1.1rem 1.3rem;font-family:"Barlow Condensed",sans-serif;font-size:19px;font-weight:800;color:#fff;text-transform:uppercase}
+.modal-body{padding:1.2rem 1.3rem}
+.modal-body p{font-size:13px;color:var(--gray-700);margin-bottom:.9rem;line-height:1.55}
+.modal-body input{width:100%;padding:10px 12px;border:1px solid var(--gray-300);border-radius:7px;font-size:14px;outline:none}
+.modal-body input:focus{border-color:var(--orange)}
+.modal-foot{padding:0 1.3rem 1.3rem}
+.err{color:var(--red);font-size:11.5px;margin-top:5px;display:none}
+
+.foot-note{text-align:center;font-size:11px;color:var(--gray-400);margin-top:1.25rem}
+
+@media(max-width:480px){
+  .wrap{padding:1rem 1rem 2.5rem}
+  .pn-seg{font-size:15px}
+  .reel-window{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="emailModal">
+  <div class="modal">
+    <div class="modal-hdr">Part Number Slot Machine</div>
+    <div class="modal-body">
+      <p>Spin the reels, decode the part number, and see how well you know SBS nomenclature. Enter your email to start &mdash; your score gets saved as you play.</p>
+      <input type="email" id="emailInput" placeholder="you@company.com" autocomplete="email">
+      <div class="err" id="emailErr">Enter a valid email to continue.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="startGame()">Let's Spin &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hdr">
+    <div class="hdr-icon">🎰</div>
+    <div>
+      <div class="hdr-title">Part Number Slot Machine</div>
+      <div class="hdr-sub">Decode SBS part numbers &mdash; spin, nudge, learn</div>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <div class="score-tile"><div class="score-n" id="scoreVal">0</div><div class="score-l">Score</div></div>
+    <div class="score-tile"><div class="score-n" id="streakVal">0</div><div class="score-l">Streak</div></div>
+    <div class="score-tile"><div class="score-n" id="spinsVal">0</div><div class="score-l">Spins</div></div>
+    <div class="score-tile"><div class="score-n" id="bestVal">0</div><div class="score-l">Best</div></div>
+  </div>
+
+  <div class="cabinet">
+    <div class="pn-readout" id="pnReadout">
+      <span class="pn-seg size" id="segSize">&hellip;</span>
+      <span class="pn-seg code" id="segCode">&hellip;</span>
+      <span class="pn-seg material" id="segMaterial">&hellip;</span>
+    </div>
+    <div class="reels">
+      <div class="reel-col">
+        <div class="reel-lbl">Size</div>
+        <div class="reel-window" id="reelSize">&hellip;</div>
+        <div class="nudge-row">
+          <button class="nudge-btn" id="nudgeSizeUp" onclick="nudge('size')">&#8635;</button>
+        </div>
+      </div>
+      <div class="reel-col">
+        <div class="reel-lbl">Code</div>
+        <div class="reel-window" id="reelCode">&hellip;</div>
+        <div class="nudge-row">
+          <button class="nudge-btn" id="nudgeCodeUp" onclick="nudge('code')">&#8635;</button>
+        </div>
+      </div>
+      <div class="reel-col">
+        <div class="reel-lbl">Material</div>
+        <div class="reel-window" id="reelMaterial">&hellip;</div>
+        <div class="nudge-row">
+          <button class="nudge-btn" id="nudgeMaterialUp" onclick="nudge('material')">&#8635;</button>
+        </div>
+      </div>
+    </div>
+    <div class="spin-row">
+      <button class="btn btn-primary" id="spinBtn" onclick="spin()" disabled>🎰 Spin</button>
+    </div>
+  </div>
+
+  <div id="questionArea">
+    <div class="qcard"><div class="idle-msg" id="idleMsg">Loading part number data&hellip;</div></div>
+  </div>
+
+  <div class="foot-note">Nudge &#8635; rerolls just that one reel and asks a question about what changed. Full Spin rerolls everything.</div>
+</div>
+
+<script>
+// ───────────────────────── CONFIG ─────────────────────────
+// Paste your deployed Google Apps Script Web App URL below (see SETUP.md).
+// Leave blank to run on the small built-in fallback data set.
+const CONFIG = {
+  API_URL: "https://script.google.com/macros/s/AKfycbx0V_uys2rOZn5Sep-dFy925QM-S5ZHiRGS120uDj2ZhxhVH7Zaesf_Y9KUQgaRdimHew/exec"
+};
+
+// Small built-in fallback so the tool still works before the Sheet is wired up.
+const FALLBACK_CODES = [
+  {Code:"ACN",Meaning:"Acorn Nut",Family:"Nuts"},
+  {Code:"ALN",Meaning:"Allenuts",Family:"Nuts"},
+  {Code:"CAN",Meaning:"Hex Castle Nut",Family:"Nuts"},
+  {Code:"CDS",Meaning:"Coarse Drywall Screw",Family:"Screws"},
+  {Code:"ASA",Meaning:"Acorn Sleeve Anchor",Family:"Anchors & Inserts"},
+  {Code:"AAC",Meaning:"Closed-End Rivet, Aluminum/Aluminum",Family:"Rivets"},
+  {Code:"ABR",Meaning:"Aluminum Brazier Head Rivet",Family:"Rivets"},
+  {Code:"BTS",Meaning:"Brass Tip Set Screw",Family:"Screws"},
+];
+const FALLBACK_MATERIALS = [
+  {Code:"S",Meaning:"Stainless Steel A2 (304) - general corrosion resistance"},
+  {Code:"3",Meaning:"Stainless Steel A4 (316) - marine / chemical resistance"},
+  {Code:"8",Meaning:"Grade 8 / Class 8.8 - high-strength steel"},
+  {Code:"1",Meaning:"Class 10.9 - metric high-strength steel"},
+  {Code:"2",Meaning:"Class 12.9 - metric ultra-high-strength steel"},
+  {Code:"5",Meaning:"Grade 5 - inch medium-strength steel"},
+  {Code:"(none)",Meaning:"Plain Steel - no material code means standard steel"},
+];
+// Purely cosmetic reel - not quizzed on, just flavor for the part number look.
+const SIZES = ["#6-32","#8-32","#10-24","1/4-20","5/16-18","3/8-16","7/16-14","1/2-13","M4-0.7","M5-0.8","M6-1.0","M8-1.25"];
+
+// ───────────────────────── STATE ─────────────────────────
+let CODES = [], MATERIALS = [];
+let state = { email:null, score:0, streak:0, spins:0, best:0, reel:{size:null,code:null,material:null}, q:null, answered:false };
+
+const $ = id => document.getElementById(id);
+
+// ───────────────────────── INIT ─────────────────────────
+(function init(){
+  const savedEmail = localStorage.getItem('sbsQuizEmail');
+  const savedBest = parseInt(localStorage.getItem('sbsQuizBest')||'0',10);
+  state.best = savedBest; $('bestVal').textContent = savedBest;
+  if (savedEmail) { state.email = savedEmail; $('emailModal').remove(); }
+  loadData();
+})();
+
+async function loadData(){
+  if (CONFIG.API_URL) {
+    try {
+      const res = await fetch(CONFIG.API_URL, {cache:'no-cache'});
+      const json = await res.json();
+      if (json.codes && json.codes.length) CODES = json.codes.filter(c=>c.Code);
+      if (json.materials && json.materials.length) MATERIALS = json.materials.filter(m=>m.Code);
+    } catch(err) {
+      console.warn('Could not load from Google Sheet, using fallback data.', err);
+    }
+  }
+  if (!CODES.length) CODES = FALLBACK_CODES;
+  if (!MATERIALS.length) MATERIALS = FALLBACK_MATERIALS;
+  $('idleMsg').textContent = 'Hit Spin to decode your first SBS part number.';
+  $('spinBtn').disabled = false;
+  randomReels(false);
+}
+
+function startGame(){
+  const val = $('emailInput').value.trim();
+  const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  if (!ok) { $('emailErr').style.display = 'block'; return; }
+  state.email = val;
+  localStorage.setItem('sbsQuizEmail', val);
+  $('emailModal').remove();
+}
+
+// ───────────────────────── REELS ─────────────────────────
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function randomReels(animate){
+  const size = pick(SIZES);
+  const code = pick(CODES);
+  const material = pick(MATERIALS);
+  state.reel = {size, code, material};
+  if (animate) spinAnimate(['reelSize','reelCode','reelMaterial'], [size, code.Code, material.Code]);
+  else renderReels();
+}
+
+function renderReels(){
+  $('reelSize').textContent = state.reel.size;
+  $('reelCode').textContent = state.reel.code.Code;
+  $('reelMaterial').textContent = state.reel.material.Code === '(none)' ? '—' : state.reel.material.Code;
+  $('segSize').textContent = state.reel.size;
+  $('segCode').textContent = state.reel.code.Code;
+  $('segMaterial').textContent = state.reel.material.Code === '(none)' ? '' : state.reel.material.Code;
+}
+
+function spinAnimate(ids, finals, cb){
+  const pools = {reelSize:SIZES, reelCode:CODES.map(c=>c.Code), reelMaterial:MATERIALS.map(m=>m.Code)};
+  ids.forEach((id,i)=>{
+    const el = $(id); el.classList.add('spinning');
+    let n = 0; const ticks = 10 + i*4;
+    const t = setInterval(()=>{
+      el.textContent = pick(pools[id]);
+      n++;
+      if (n >= ticks){ clearInterval(t); el.textContent = finals[i]; el.classList.remove('spinning'); renderReels(); if (i===ids.length-1 && cb) cb(); }
+    }, 55);
+  });
+}
+
+// ───────────────────────── SPIN / NUDGE ─────────────────────────
+function spin(){
+  if (!state.email){ return; } // modal still showing, ignore
+  setControlsEnabled(false);
+  state.spins++; $('spinsVal').textContent = state.spins;
+  const size = pick(SIZES), code = pick(CODES), material = pick(MATERIALS);
+  state.reel = {size, code, material};
+  spinAnimate(['reelSize','reelCode','reelMaterial'], [size, code.Code, material.Code === '(none)'?'—':material.Code], ()=>{
+    askQuestion(Math.random() < 0.7 ? 'code' : 'material');
+    setControlsEnabled(true);
+  });
+}
+
+function nudge(which){
+  if (!state.email || !state.reel.code) return;
+  setControlsEnabled(false);
+  if (which === 'size'){
+    const size = pick(SIZES); state.reel.size = size;
+    spinAnimate(['reelSize'], [size], ()=>setControlsEnabled(true));
+    return;
+  }
+  state.spins++; $('spinsVal').textContent = state.spins;
+  if (which === 'code'){
+    const code = pick(CODES); state.reel.code = code;
+    spinAnimate(['reelCode'], [code.Code], ()=>{ askQuestion('code'); setControlsEnabled(true); });
+  } else {
+    const material = pick(MATERIALS); state.reel.material = material;
+    spinAnimate(['reelMaterial'], [material.Code === '(none)'?'—':material.Code], ()=>{ askQuestion('material'); setControlsEnabled(true); });
+  }
+}
+
+function setControlsEnabled(on){
+  $('spinBtn').disabled = !on;
+  ['nudgeSizeUp','nudgeCodeUp','nudgeMaterialUp'].forEach(id=>$(id).disabled = !on);
+}
+
+// ───────────────────────── QUESTION ─────────────────────────
+function askQuestion(segment){
+  const pool = segment === 'code' ? CODES : MATERIALS;
+  const correctItem = segment === 'code' ? state.reel.code : state.reel.material;
+  const valueLabel = correctItem.Code === '(none)' ? 'no material code' : correctItem.Code;
+  const others = pool.filter(p => p.Code !== correctItem.Code);
+  const distractors = shuffle(others).slice(0,3).map(p=>p.Meaning);
+  const options = shuffle([correctItem.Meaning, ...distractors]);
+
+  state.q = { segment, correctMeaning: correctItem.Meaning, options };
+  state.answered = false;
+
+  const prompt = segment === 'code'
+    ? `On this part number, what does the code <strong>${valueLabel}</strong> mean?`
+    : `On this part number, what does the material code <strong>${valueLabel}</strong> mean?`;
+
+  const html = `
+    <div class="qcard">
+      <div class="q-hint">${segment === 'code' ? 'Part type code' : 'Material code'}</div>
+      <div class="q-prompt">${prompt}</div>
+      <div class="choices" id="choicesWrap">
+        ${options.map((opt,i)=>`<button class="choice" onclick="answer(${i})">${opt}</button>`).join('')}
+      </div>
+      <div id="explainArea"></div>
+    </div>`;
+  $('questionArea').innerHTML = html;
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+function answer(i){
+  if (state.answered) return;
+  state.answered = true;
+  const btns = document.querySelectorAll('#choicesWrap .choice');
+  const chosen = btns[i].textContent;
+  const correct = chosen === state.q.correctMeaning;
+  btns.forEach(b=>{
+    b.disabled = true;
+    if (b.textContent === state.q.correctMeaning) b.classList.add('correct');
+    else if (b === btns[i]) b.classList.add('wrong');
+  });
+
+  if (correct){
+    state.score += 10; state.streak += 1;
+  } else {
+    state.streak = 0;
+  }
+  $('scoreVal').textContent = state.score;
+  $('streakVal').textContent = state.streak;
+  if (state.score > state.best){ state.best = state.score; $('bestVal').textContent = state.best; localStorage.setItem('sbsQuizBest', state.best); }
+
+  $('explainArea').innerHTML = `
+    <div class="explain">${correct ? '✅ Correct! ' : '❌ Not quite. '}<strong>${state.q.correctMeaning}</strong></div>
+    <div class="next-row"><button class="btn btn-outline" onclick="spin()">Spin again &rarr;</button></div>`;
+
+  submitResult(correct);
+}
+
+// ───────────────────────── BACKEND ─────────────────────────
+function assembledPartNumber(){
+  const mat = state.reel.material.Code === '(none)' ? '' : state.reel.material.Code;
+  return `${state.reel.size} ${state.reel.code.Code}${mat}`;
+}
+
+function submitResult(correct){
+  if (!CONFIG.API_URL) return; // no backend configured yet
+  const payload = {
+    email: state.email,
+    score: state.score,
+    spins: state.spins,
+    partNumber: assembledPartNumber(),
+    lastQuestion: state.q.segment,
+    correct: correct
+  };
+  fetch(CONFIG.API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) }).catch(()=>{});
+}
+</script>
+</body>
+</html>
