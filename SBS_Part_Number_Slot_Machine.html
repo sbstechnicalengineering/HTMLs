@@ -20,6 +20,7 @@
   --r:8px;--shadow:0 4px 16px rgba(0,0,0,.12)
 }
 body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-height:100vh;font-size:14px;line-height:1.5}
+@media(min-width:650px){ body{zoom:1.5} }
 .wrap{max-width:720px;margin:0 auto;padding:1.25rem 1.25rem 3rem}
 
 .hdr{display:flex;align-items:center;gap:14px;margin-bottom:1.25rem;padding:0.65rem 1.25rem;background:var(--white);border-bottom:3px solid var(--orange);position:sticky;top:0;z-index:50;box-shadow:var(--shadow);margin-left:-1.25rem;margin-right:-1.25rem;width:calc(100% + 2.5rem)}
@@ -34,7 +35,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .score-tile--gold{background:linear-gradient(180deg,#FFF6DE,#FBE7A8);border-color:#E3BE5C}
 .score-tile--gold .score-n{color:#8A6418}
 .score-tile--gold .score-l{color:#9C7A22}
-.coin-ico{font-size:16px;line-height:1;filter:drop-shadow(0 1px 0 rgba(0,0,0,.15))}
+.coin-stack{display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.25))}
 
 .machine-row{display:flex;align-items:stretch;gap:0;margin-bottom:1rem}
 .cabinet{flex:1;min-width:0;background:var(--navy);border-radius:14px 0 0 14px;padding:1.25rem 1rem 1.5rem;box-shadow:var(--shadow)}
@@ -63,6 +64,11 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .nudge-btn:disabled{opacity:.25;cursor:default}
 .nudge-ico{font-size:11px;line-height:1}
 .nudge-txt{font-size:6.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;font-family:"Barlow",sans-serif}
+.hold-btn{display:flex;flex-direction:column;align-items:center;gap:1px;width:100%;padding:3px 1px;border:none;border-radius:6px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);cursor:pointer;transition:background .12s,color .12s;margin-top:2px}
+.hold-btn:hover:not(:disabled){background:rgba(255,255,255,.2)}
+.hold-btn:disabled{opacity:.25;cursor:default}
+.hold-btn.active{background:#E3BE5C;color:var(--navy-darker)}
+.reel-col.is-held .reel-window{outline:2px solid #E3BE5C;outline-offset:1px}
 
 .spin-row{margin-top:1.1rem;text-align:center;display:flex;gap:8px;justify-content:center}
 .btn{padding:11px 22px;border:none;border-radius:var(--r);font-family:"Barlow",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:7px;letter-spacing:.02em}
@@ -79,7 +85,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
 .q-hint{font-size:10px;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:6px}
 .q-prompt{font-size:15px;font-weight:600;color:var(--navy);margin-bottom:12px;font-family:"Barlow",sans-serif}
 .choices{display:flex;flex-direction:column;gap:7px}
-.choice{text-align:left;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--r);background:var(--white);font-size:13px;color:var(--navy);cursor:pointer;transition:all .12s;font-family:var(--sans)}
+.choice{text-align:left;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--r);background:var(--white);font-size:13px;line-height:1.45;color:var(--navy);cursor:pointer;transition:all .12s;font-family:var(--sans)}
 .choice:hover:not(:disabled){border-color:var(--orange);background:var(--orange-pale)}
 .choice.correct{background:var(--green-bg);border-color:var(--green-border);color:var(--green);font-weight:600}
 .choice.wrong{background:var(--red-bg);border-color:var(--red-border);color:var(--red)}
@@ -137,7 +143,21 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
   </div>
 
   <div class="scorebar">
-    <div class="score-tile score-tile--gold"><div class="score-n"><span class="coin-ico">🪙</span><span id="creditsVal">5</span></div><div class="score-l">Credits</div></div>
+    <div class="score-tile score-tile--gold"><div class="score-n">
+      <svg class="coin-stack" viewBox="0 0 44 40" width="22" height="20" aria-hidden="true">
+        <ellipse cx="22" cy="33" rx="16" ry="5.5" fill="#9C6F0E"/>
+        <path d="M6 28 A16 5.5 0 0 0 38 28 L38 33 A16 5.5 0 0 1 6 33 Z" fill="#C9930F"/>
+        <ellipse cx="22" cy="28" rx="16" ry="5.5" fill="#F4C430"/>
+        <ellipse cx="22" cy="25.5" rx="14" ry="4.8" fill="#9C6F0E"/>
+        <path d="M8 21 A14 4.8 0 0 0 36 21 L36 25.5 A14 4.8 0 0 1 8 25.5 Z" fill="#D8A31A"/>
+        <ellipse cx="22" cy="21" rx="14" ry="4.8" fill="#F7CE4A"/>
+        <ellipse cx="22" cy="18.5" rx="12" ry="4.1" fill="#9C6F0E"/>
+        <path d="M10 14.8 A12 4.1 0 0 0 34 14.8 L34 18.5 A12 4.1 0 0 1 10 18.5 Z" fill="#E6B52E"/>
+        <ellipse cx="22" cy="14.8" rx="12" ry="4.1" fill="#FFDD66"/>
+        <ellipse cx="22" cy="14.8" rx="7" ry="2.4" fill="none" stroke="#C9930F" stroke-width="1.1"/>
+      </svg>
+      <span id="creditsVal">5</span>
+    </div><div class="score-l">Credits</div></div>
     <div class="score-tile"><div class="score-n" id="streakVal">0</div><div class="score-l">Streak</div></div>
     <div class="score-tile"><div class="score-n" id="spinsVal">0</div><div class="score-l">Spins</div></div>
     <div class="score-tile"><div class="score-n" id="bestVal">0</div><div class="score-l">High score</div></div>
@@ -149,7 +169,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
         <div class="reels" id="reelsWrap"></div>
       </div>
       <div class="spin-row">
-        <button class="btn btn-cashout" id="cashoutBtn" onclick="cashOut()" disabled>Cash Out</button>
+        <button class="btn btn-cashout" id="cashoutBtn" onclick="cashOut()" disabled>🏦 Collect Bank</button>
       </div>
     </div>
     <div class="lever-housing">
@@ -164,7 +184,7 @@ body{font-family:var(--sans);background:var(--gray-50);color:var(--navy);min-hei
     <div class="qcard"><div class="idle-msg" id="idleMsg">Loading real SBS part numbers&hellip;</div></div>
   </div>
 
-  <div class="foot-note">Pull the lever or hit Spin &mdash; each spin costs 1 coin, so skipping a question still costs you. Nudge &#8635; swaps in another real part that changes just that reel; Code/Material nudges cost a coin too, the rest are free. Cash Out unlocks after 3 spins, or anytime you run out of coins.</div>
+  <div class="foot-note">Pull the lever or hit Spin &mdash; each spin costs 1 coin, so skipping a question still costs you. Hold &#128274; freezes a reel for free so the next spin leaves it alone; Nudge &#8635; swaps in another real part that changes just that reel (Code/Material nudges cost a coin, the rest are free). Collect Bank unlocks after 3 spins, or anytime you run out of coins.</div>
 </div>
 
 <script>
@@ -191,17 +211,54 @@ const FALLBACK_REALPARTS = [
   {PartNumber:"43C225KSS",SizePrefix:"43C225",Code:"KSS",CodeMeaning:"\"Knurl Pt\" Sq Hd Set Screw",Family:"Screws",Suffix:"",MaterialCode:"",MaterialMeaning:"Plain Steel - no material code means standard steel"}
 ];
 
-const MATERIAL_CHARS = new Set(['S','3','8','1','2','5']);
 const KIND_ORDER = ['diameter','thread','length','modifier','code','material','suffix','slash'];
 const KIND_LABEL = {diameter:'Diameter',thread:'Thread',length:'Length',modifier:'Metric',code:'Code',material:'Material',suffix:'Suffix',slash:'Ext.'};
 const WHEEL_COUNT = 8;
 
+// ───────────────────────── DECODE LEGENDS ─────────────────────────
+// Pulled straight from SBS_Part_Number_Decoder.html's own reference tables (the
+// company's existing published decoder), so the "full decode" quiz only ever
+// asserts a meaning we can trace back to that source — never a guess.
+const INCH_DIA_CODE = {
+  "#0":"00","#2":"09","#4":"11","#6":"13","#8":"16","#10":"19","#12":"21",
+  "1/4":"25","5/16":"31","3/8":"37","7/16":"43","1/2":"50",
+  "9/16":"56","5/8":"62","3/4":"75","7/8":"87",
+  "1":"100","1-1/4":"125","1-1/2":"150","1-3/4":"175",
+  "2":"200","2-1/2":"250","3":"300","3-1/2":"350","4":"400"
+};
+const INCH_DIA_LABEL = {};
+Object.keys(INCH_DIA_CODE).forEach(k => { INCH_DIA_LABEL[INCH_DIA_CODE[k]] = k + '" dia'; });
+
+const INCH_LEN_LABEL = {
+  "25":'1/4"',"37":'3/8"',"50":'1/2"',"62":'5/8"',"75":'3/4"',"87":'7/8"',"100":'1"',
+  "112":'1-1/8"',"125":'1-1/4"',"137":'1-3/8"',"150":'1-1/2"',"162":'1-5/8"',"175":'1-3/4"',
+  "187":'1-7/8"',"200":'2"',"212":'2-1/8"',"225":'2-1/4"',"250":'2-1/2"',"275":'2-3/4"',
+  "300":'3"',"325":'3-1/4"',"350":'3-1/2"',"375":'3-3/4"',"400":'4"',"425":'4-1/4"',
+  "450":'4-1/2"',"500":'5"',"550":'5-1/2"',"600":'6"',"700":'7"',"800":'8"',"900":'9"',
+  "1000":'10"',"1100":'11"',"1200":'12"',"1400":'14"',"1600":'16"',"1800":'18"',"2400":'24"'
+};
+const THREAD_LABEL = { C:'Coarse thread (UNC)', F:'Fine thread (UNF)' };
+const FINISH_LABEL = {
+  'TZ':'Trivalent clear zinc', '-Z':'Clear zinc electroplate', 'Z':'Clear zinc electroplate',
+  '-Y':'Yellow zinc electroplate', 'Y':'Yellow zinc electroplate', 'P':'Plain (no finish)',
+  'Q':'Black zinc', '-Q':'Black zinc', 'B':'Black oxide', 'G':'Hot-dip galvanized'
+};
+const SLASH_LABEL = {
+  '/N':'Nylon / Nylok patch', '/NP':'Nylon pellet', '/SB':'Blue Scotchgrip threadlocker',
+  '/SY':'Yellow Scotchgrip', '/SGP':'Green Scotchgrip (heavy)', '/SL':'Shou Long manufacturer equivalent',
+  '/EL':'Electropolished', '/EP':'Electropolished', '/CL':'Cleaned by SBS per customer req.',
+  '/KO':'Kolsterized heat treated', '/FT':'Fully threaded', '/LH':'Left-hand thread',
+  '/DR':'Drilled', '/UC':'Thread undercut', '/KN':'Knurled head', '/H6':'Pin tolerance H6',
+  '/M6':'Pin tolerance m6', '/SP':'Special variation', '/PR':'Per-print (customer print required)'
+};
+
 // ───────────────────────── STATE ─────────────────────────
 let REALPARTS = [];
 let CODE_GROUPS = {};
+let ATTRIBUTE_POOLS = {};
 let state = {
   email:null, credits:5, streak:0, spins:0, best:0,
-  current:null, q:null, answered:false, cashedOut:false
+  current:null, q:null, answered:false, cashedOut:false, held:new Set()
 };
 
 const $ = id => document.getElementById(id);
@@ -249,6 +306,53 @@ function attachWheels(r){
   return r;
 }
 
+// ───────────────────────── FULL-DECODE ATTRIBUTES ─────────────────────────
+// Only ever returns a label for something we can trace to the legends above —
+// an unmapped size/length/finish code is left out rather than guessed at.
+function diameterLabel(r){
+  const d = r.byKind.diameter;
+  if (!d) return null;
+  if (d.charAt(0) === '.') return 'M' + d.slice(1) + ' dia';
+  return INCH_DIA_LABEL[d] || null;
+}
+function lengthLabel(r){
+  const len = r.byKind.length;
+  if (!len) return null;
+  const metric = r.byKind.diameter && r.byKind.diameter.charAt(0) === '.';
+  if (metric) return len + 'mm long';
+  return INCH_LEN_LABEL[len] ? (INCH_LEN_LABEL[len] + ' long') : null;
+}
+function finishLabel(r){
+  const s = r.byKind.suffix;
+  if (!s) return null;
+  const stripped = s.replace(/^-/, '');
+  const keys = Object.keys(FINISH_LABEL);
+  for (const k of keys){ if (stripped === k.replace(/^-/, '')) return FINISH_LABEL[k]; }
+  return null;
+}
+function slashLabel(r){
+  const s = r.byKind.slash;
+  if (!s) return null;
+  return SLASH_LABEL[s] || SLASH_LABEL[s.toUpperCase()] || null;
+}
+function confidentAttributes(r){
+  const attrs = [];
+  const dia = diameterLabel(r); if (dia) attrs.push({kind:'diameter', label:dia});
+  if (r.byKind.thread && THREAD_LABEL[r.byKind.thread]) attrs.push({kind:'thread', label:THREAD_LABEL[r.byKind.thread]});
+  const len = lengthLabel(r); if (len) attrs.push({kind:'length', label:len});
+  attrs.push({kind:'code', label:r.CodeMeaning});
+  attrs.push({kind:'material', label:r.MaterialMeaning});
+  const fin = finishLabel(r); if (fin) attrs.push({kind:'finish', label:fin});
+  const sl = slashLabel(r); if (sl) attrs.push({kind:'slash', label:sl});
+  return attrs;
+}
+function buildAttributePools(){
+  const pools = {diameter:new Set(), length:new Set(), finish:new Set(), slash:new Set(), code:new Set(), material:new Set(), thread:new Set()};
+  REALPARTS.forEach(r => confidentAttributes(r).forEach(a => pools[a.kind].add(a.label)));
+  ATTRIBUTE_POOLS = {};
+  Object.keys(pools).forEach(k => { ATTRIBUTE_POOLS[k] = Array.from(pools[k]); });
+}
+
 // ───────────────────────── INIT ─────────────────────────
 (function init(){
   const savedEmail = localStorage.getItem('sbsQuizEmail');
@@ -287,10 +391,12 @@ async function loadData(){
   REALPARTS.forEach(r => {
     (CODE_GROUPS[r.Code] = CODE_GROUPS[r.Code] || []).push(r);
   });
+  buildAttributePools();
 
   $('idleMsg').textContent = 'Hit Spin to decode a real SBS part number.';
   randomReels();
   setControlsEnabled(true);
+  refreshAllHoldIcons();
 }
 
 function startGame(){
@@ -317,6 +423,7 @@ function buildReelSkeleton(){
           <div class="reel-row" id="below${i}">&middot;&middot;&middot;</div>
         </div>
         <button class="nudge-btn" id="nudgeBtn${i}" onclick="nudge(${i})" disabled><span class="nudge-ico">&#8635;</span><span class="nudge-txt">Nudge</span></button>
+        <button class="hold-btn" id="holdBtn${i}" onclick="toggleHold(${i})" disabled><span class="nudge-ico">&#128275;</span><span class="nudge-txt">Hold</span></button>
       </div>`;
   }
   $('reelsWrap').innerHTML = html;
@@ -344,6 +451,9 @@ function syncStructure(r){
       $('above'+i).textContent = '';
       $('below'+i).textContent = '';
       $('nudgeBtn'+i).disabled = true;
+      $('holdBtn'+i).disabled = true;
+      state.held.delete(i);
+      holdIcon(i);
     }
   }
 }
@@ -365,6 +475,48 @@ function randomReels(){
   if (!REALPARTS.length) return;
   state.current = pick(REALPARTS);
   renderAllStatic(state.current);
+}
+
+// ───────────────────────── HOLD ─────────────────────────
+// Real "hold" feature, same as a classic fruit machine: freezing a reel is free,
+// it just protects that reel's value on the next Spin (held reels don't animate
+// and the pool for the next part is filtered to keep them unchanged); holds are
+// a one-shot protection and clear once that Spin resolves.
+function holdIcon(i){
+  const btn = $('holdBtn'+i);
+  if (!btn) return;
+  const held = state.held.has(i);
+  btn.classList.toggle('active', held);
+  btn.innerHTML = held
+    ? '<span class="nudge-ico">&#128274;</span><span class="nudge-txt">Held</span>'
+    : '<span class="nudge-ico">&#128275;</span><span class="nudge-txt">Hold</span>';
+  const col = $('col'+i);
+  if (col) col.classList.toggle('is-held', held);
+}
+
+function refreshAllHoldIcons(){
+  for (let i = 0; i < WHEEL_COUNT; i++) holdIcon(i);
+}
+
+function toggleHold(i){
+  if ($('holdBtn'+i).disabled) return;
+  if (state.held.has(i)) state.held.delete(i); else state.held.add(i);
+  holdIcon(i);
+  setControlsEnabled(true); // holding/unholding can only happen while controls are already on
+}
+
+// Narrows a candidate pool to rows that still match every OTHER held reel's
+// current value (excludeIndex is the reel that's actually about to change).
+// Falls back to the unfiltered pool rather than dead-ending the spin if no
+// real part satisfies every hold at once.
+function applyHoldFilter(pool, excludeIndex){
+  const cur = state.current;
+  if (!cur || !state.held.size) return pool;
+  const compact = cur.compact;
+  const heldKinds = Array.from(state.held).filter(i => i !== excludeIndex && i < compact.length).map(i => compact[i].kind);
+  if (!heldKinds.length) return pool;
+  const filtered = pool.filter(r => heldKinds.every(k => r.byKind[k] === cur.byKind[k]));
+  return filtered.length ? filtered : pool;
 }
 
 // Animates reel `i` ticking through random real values of the same kind as the
@@ -413,7 +565,8 @@ function spin(){
   state.credits -= 1; $('creditsVal').textContent = state.credits;
   state.spins++; $('spinsVal').textContent = state.spins;
   updateCashoutAvailability();
-  const next = pick(REALPARTS);
+  const pool = applyHoldFilter(REALPARTS, -1);
+  const next = pick(pool);
   syncStructure(next);
 
   let done = 0;
@@ -423,17 +576,23 @@ function spin(){
     if (done === wheelsToAnimate){
       state.current = next;
       renderAllStatic(next);
-      askQuestion(Math.random() < 0.7 ? 'code' : 'material');
+      state.held.clear();
+      refreshAllHoldIcons();
+      askQuestion();
       setControlsEnabled(true);
     }
   };
-  for (let i = 0; i < wheelsToAnimate; i++) animateWheel(i, next, after);
+  for (let i = 0; i < wheelsToAnimate; i++){
+    if (state.held.has(i)) after();
+    else animateWheel(i, next, after);
+  }
 }
 
 function nudge(i){
   if (!state.email || state.cashedOut || !state.current) return;
   const compact = state.current.compact;
   if (i >= compact.length) return;
+  if (state.held.has(i)) return;
   const kind = compact[i].kind;
   const quizzes = (kind === 'code' || kind === 'material');
   if (quizzes && state.credits < 1) return;
@@ -445,13 +604,13 @@ function nudge(i){
 
   let next;
   if (kind === 'code'){
-    const options = REALPARTS.filter(r => r.Code !== cur.Code);
+    const options = applyHoldFilter(REALPARTS.filter(r => r.Code !== cur.Code), i);
     next = options.length ? pick(options) : pick(REALPARTS);
   } else if (kind === 'material'){
-    const options = group.filter(r => r.MaterialCode !== cur.MaterialCode);
+    const options = applyHoldFilter(group.filter(r => r.MaterialCode !== cur.MaterialCode), i);
     next = options.length ? pick(options) : pick(REALPARTS.filter(r => r.Code !== cur.Code));
   } else {
-    const options = group.filter(r => r.byKind[kind] !== cur.byKind[kind]);
+    const options = applyHoldFilter(group.filter(r => r.byKind[kind] !== cur.byKind[kind]), i);
     next = options.length ? pick(options) : pick(REALPARTS);
   }
 
@@ -460,11 +619,15 @@ function nudge(i){
     state.spins++; $('spinsVal').textContent = state.spins; updateCashoutAvailability();
   }
 
+  // Drop any hold that no longer lands on a real reel for the new part.
+  Array.from(state.held).forEach(idx => { if (idx >= next.compact.length) state.held.delete(idx); });
+
   // Instantly resync every other reel to the new part, then animate just this one.
   state.current = next;
   renderAllStatic(next);
+  refreshAllHoldIcons();
   animateWheel(i, next, () => {
-    if (quizzes) askQuestion(kind);
+    if (quizzes) askQuestion();
     setControlsEnabled(true);
   });
 }
@@ -474,9 +637,11 @@ function setControlsEnabled(on){
   $('spinBtn').disabled = !on || state.cashedOut || !canAfford;
   const compact = state.current ? state.current.compact : [];
   for (let i = 0; i < WHEEL_COUNT; i++){
-    if (i >= compact.length){ $('nudgeBtn'+i).disabled = true; continue; }
+    if (i >= compact.length){ $('nudgeBtn'+i).disabled = true; $('holdBtn'+i).disabled = true; continue; }
     const costs = (compact[i].kind === 'code' || compact[i].kind === 'material');
-    $('nudgeBtn'+i).disabled = !on || state.cashedOut || (costs && !canAfford);
+    const held = state.held.has(i);
+    $('nudgeBtn'+i).disabled = !on || state.cashedOut || held || (costs && !canAfford);
+    $('holdBtn'+i).disabled = !on || state.cashedOut;
   }
   updateCashoutAvailability();
 }
@@ -486,30 +651,38 @@ function updateCashoutAvailability(){
 }
 
 // ───────────────────────── QUESTION ─────────────────────────
-function askQuestion(segment){
+// Quizzes the WHOLE part number at once: the correct choice is the full decode
+// (size, thread, type, material, finish — whichever of those this part number
+// confidently resolves to); every wrong choice is a genuine near-miss, built by
+// swapping exactly one of those attributes for a different real value (fine
+// instead of coarse, zinc yellow instead of plain zinc, a different real code's
+// meaning, etc.) rather than an unrelated, easy-to-spot-wrong distractor.
+function askQuestion(){
   const r = state.current;
-  const isCode = segment === 'code';
-  const correctMeaning = isCode ? r.CodeMeaning : r.MaterialMeaning;
-  const valueLabel = isCode ? r.Code : (r.MaterialCode === '' ? 'no material code' : r.MaterialCode);
+  const attrs = confidentAttributes(r);
+  const correctAnswer = attrs.map(a => a.label).join(' · ');
 
-  const pool = isCode
-    ? REALPARTS.filter(x => x.Code !== r.Code).map(x => x.CodeMeaning)
-    : REALPARTS.filter(x => x.MaterialCode !== r.MaterialCode).map(x => x.MaterialMeaning);
-  const uniquePool = Array.from(new Set(pool)).filter(m => m !== correctMeaning);
-  const distractors = shuffle(uniquePool).slice(0,3);
-  const options = shuffle([correctMeaning, ...distractors]);
+  const distractors = [];
+  const swappable = attrs.filter(a => (ATTRIBUTE_POOLS[a.kind]||[]).some(v => v !== a.label));
+  let guard = 0;
+  while (distractors.length < 3 && swappable.length && guard < 40){
+    guard++;
+    const target = pick(swappable);
+    const altPool = ATTRIBUTE_POOLS[target.kind].filter(v => v !== target.label);
+    if (!altPool.length) continue;
+    const altValue = pick(altPool);
+    const variant = attrs.map(a => a.kind === target.kind ? altValue : a.label).join(' · ');
+    if (variant !== correctAnswer && !distractors.includes(variant)) distractors.push(variant);
+  }
+  const options = shuffle([correctAnswer, ...distractors]);
 
-  state.q = { segment, correctMeaning, options };
+  state.q = { correctAnswer, options, segment: 'full-decode' };
   state.answered = false;
-
-  const prompt = isCode
-    ? `On <strong>${r.PartNumber}</strong>, what does the code <strong>${valueLabel}</strong> mean?`
-    : `On <strong>${r.PartNumber}</strong>, what does the material code <strong>${valueLabel}</strong> mean?`;
 
   const html = `
     <div class="qcard">
-      <div class="q-hint">${isCode ? 'Part type code' : 'Material code'} &bull; real SBS part number</div>
-      <div class="q-prompt">${prompt}</div>
+      <div class="q-hint">Decode the full part number &bull; real SBS part number</div>
+      <div class="q-prompt">Which one correctly decodes <strong>${r.PartNumber}</strong>?</div>
       <div class="choices" id="choicesWrap">
         ${options.map((opt,i)=>`<button class="choice" onclick="answer(${i})">${opt}</button>`).join('')}
       </div>
@@ -529,10 +702,10 @@ function answer(i){
   state.answered = true;
   const btns = document.querySelectorAll('#choicesWrap .choice');
   const chosen = btns[i].textContent;
-  const correct = chosen === state.q.correctMeaning;
+  const correct = chosen === state.q.correctAnswer;
   btns.forEach(b=>{
     b.disabled = true;
-    if (b.textContent === state.q.correctMeaning) b.classList.add('correct');
+    if (b.textContent === state.q.correctAnswer) b.classList.add('correct');
     else if (b === btns[i]) b.classList.add('wrong');
   });
 
@@ -542,7 +715,7 @@ function answer(i){
   $('streakVal').textContent = state.streak;
 
   $('explainArea').innerHTML = `
-    <div class="explain">${correct ? '✅ Correct! +2 credits. ' : "❌ Not quite — that coin's gone. "}<strong>${state.q.correctMeaning}</strong></div>
+    <div class="explain">${correct ? '✅ Correct! +2 credits. ' : "❌ Not quite — that coin's gone. "}<strong>${state.q.correctAnswer}</strong></div>
     <div class="next-row"><button class="btn btn-outline" onclick="spin()">Spin again &rarr;</button></div>`;
 
   submitResult(correct, false);
@@ -557,8 +730,8 @@ function cashOut(){
   $('cashoutBtn').disabled = true;
   $('questionArea').innerHTML = `
     <div class="cashout-banner">
-      <div class="big">🪙 ${state.credits} credits</div>
-      <p>Cashed out after ${state.spins} spins. Refresh the page to play again.</p>
+      <div class="big">🏦 ${state.credits} credits</div>
+      <p>Bank collected after ${state.spins} spins. Refresh the page to play again.</p>
     </div>`;
   submitResult(null, true);
 }
